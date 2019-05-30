@@ -88,9 +88,13 @@ This years format will be a blend of brief presentations, followed by hands-on a
 
 Our speakers include:
 
+* [Eric Rhoads](https://www.linkedin.com/in/eric-rhoads)
+    * Cloud Solution Architect (CSA), [KiZAN Technologies](http://kizan.com)
+
 * [Mike Branstein](https://twitter.com/mikebranstein)
     * [KiZAN Technologies](http://kizan.com)
     * [Brosteins](https://brosteins.com)
+    * [LinkedIn](https://www.linkedin.com/in/mikebranstein/)
 
 ### Getting Started
 
