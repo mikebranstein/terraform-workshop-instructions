@@ -4,7 +4,85 @@ Welcome to our Terraform Workshop!
 
 ### About the Workshop
 
-Some copy here...
+Add more verbiage here.
+
+- VM image (Mike)
+    - Windows 10
+    - Visual Studio 2019
+    - .NET Core 2.2
+    - VS Code
+    - Terraform (in path)
+    - Chrome pre-installed
+- Update the ARM Template to use stored VM image
+- Update ARM Template to include
+    - Storage Account
+- Deployed VM & Storage Account from ARM Template
+
+- TF (Eric)
+    - Modular TF using Storage account as backend
+    - Module for App Service and SQL
+    - Module for Shared Services - WAF/App Gateway
+    - parameterization in modules
+        - RG
+        - Environment
+    - High-level Main.tf for dev and prod
+
+Web App (Mike)
+    - Fabrikam
+    - .NET Solution
+
+
+Potential agenda:
+- Brief Intro/Presentation/About Terraform
+- Chapter 0: Create an Azure Subscription if you need one
+- Chapter 1: Getting started quick
+    - Setup VM
+    - Subscription ID & Tenant ID
+    - Create RG view in portal
+
+- Chapter 2:
+    - Use new TF code to add:
+        - RG
+        - App Service Plan
+        - App Service
+    - A side callout/discussion on naming standards
+        - lowercase, dashes, etc.
+    - Deploy this (w/o modules to Azure)
+    - Test that website works (default IIS page)
+
+- Chatper 3: Modules
+    - Refactor what we just deployed into a module-like process
+    - Blow away existing RG
+    - Re-deploy to dev
+    - Deploy to production
+
+- Chapter 4: State management and adding a new module 
+    - Discuss State Management, why it's important
+    - Setup TF Backend and explain chicken/egg scenario
+    - Deploy, test, view statefile
+
+- Chapter 5: Add SQL and Deploy App
+    - Add in SQL Database
+    - Use VS to deploy the app to App Service
+    - deploy to dev/prod
+    - test
+
+- Chapter 6: Securing the web app with a WAF/App Gateway
+    - Intro to WAF/App Gateway
+    - Add WAF module (lot's of stuff)
+    - Deploy to dev & prod
+    - Test
+
+- Closing remarks
+
+- Full Environment
+    - RG
+    - App Service Plan 
+    - App Service
+    - SQL Azure
+    - WAF / App Gateway
+
+
 
 This years format will be a blend of brief presentations, followed by hands-on and guided labs. 
 
