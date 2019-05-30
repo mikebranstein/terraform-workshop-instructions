@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Terraform Workshop</title>
+
+	<meta charset="utf-8">
+	<meta name="description" content="Terraform Workshop">
+	<meta name="author" content="Mike Branstein &amp; Eric Rhoads">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+
+<div id="container">
+	<div id="header">
+		<a href="#" class="menu header-btn" id="toggle-toc"></a>
+		<h1>Terraform Workshop</h1>
+		<a href="https://github.com/mikebranstein/terraform-workshop" class="github header-btn"></a>
+	</div>
+
+	<div id="content-container">
+		<div id="toc">
+			<div class="toc-heading">Table of Contents</div>
+			<div id="toc-padding"></div>
+			<br />
+			<br />
+			<br />
+		</div>
+		<div id="book">
+			<div class="chapter">
+				<h2 id="introduction">Introduction</h2>
+<p>Welcome to our Terraform Workshop! </p>
+<h3 id="about-the-workshop">About the Workshop</h3>
+<p>Some copy here...</p>
+<p>This years format will be a blend of brief presentations, followed by hands-on and guided labs. </p>
+<p>Our speakers include:</p>
+<ul>
+<li><a href="https://twitter.com/mikebranstein">Mike Branstein</a><ul>
+<li><a href="http://kizan.com">KiZAN Technologies</a></li>
+<li><a href="https://brosteins.com">Brosteins</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="getting-started">Getting Started</h3>
+<p>To get started you&#39;ll need the following pre-requisites. Please take a few moments to ensure everything is installed and configured.</p>
+<ul>
+<li>Microsoft Windows PC or Mac or Linux. Just have a laptop.</li>
+<li><a href="https://azure.microsoft.com">Azure Subscription</a> (Trial is ok, or an Azure account linked to a Visual Studio subscription. See later sections of this chapter to create a free trial account or activate your Visual Studio subscription)</li>
+</ul>
+<h3 id="what-you-re-building">What You&#39;re Building</h3>
+<p>Azure is big. Really big. Too big to talk about all things Azure in a single day. </p>
+<p>We&#39;ve assembled an exciting workshop to introduce you to several Azure services that cloud developers should know about:</p>
+<ul>
+<li><a href="https://azure.microsoft.com/en-us/services/app-service/web/">Web app</a></li>
+<li><a href="https://azure.microsoft.com/en-us/services/key-vault/">Key Vault</a></li>
+<li><a href="https://azure.microsoft.com/en-us/services/sql-database/">Azure SQL Database</a></li>
+<li><a href="https://azure.microsoft.com/en-us/services/event-hubs/">Event Hub</a></li>
+<li><a href="https://azure.microsoft.com/en-us/services/functions/">Azure Functions</a></li>
+<li><a href="https://azure.microsoft.com/en-us/services/api-management/">API Management</a></li>
+<li><a href="https://azure.microsoft.com/en-us/services/cosmos-db/">Cosmos DB</a></li>
+<li><a href="https://azure.microsoft.com/en-us/services/virtual-machines/">Virtual Machines</a></li>
+</ul>
+<p>In today&#39;s workshop, you&#39;ll get started with Azure and learn how to navigate through the Azure portal! You&#39;ll activate a free Azure subscription, learn about Resource Groups, and navigate through the Azure portal. You&#39;ll also create your development environment virtual machine running Visual Studio Community Edition.</p>
+<p>Next, you&#39;ll learn about Platform as a Service (PaaS) offerings while creating a simple web app to manage data stored in an Azure SQL database. You&#39;ll finish by securing the data connection between your application and the database using an MSI (Managed Service Identity), then deploying to Azure services that host your web app.</p>
+<p>Once your app is up and running, we&#39;ll teach you how your app can be restructured for scalability by separating the backend data access later into a separately-hosted ASP.NET Web API app. You&#39;ll also learn how to secure your service.</p>
+<p>After you&#39;ve built and deployed a REST API, you&#39;ll learn how you can use Azure Functions and Cosmos DB to aggregate your data and ready it for consumption by the public.</p>
+<p>Finally, after developing a database of publicly-consumable data, we&#39;ll explore how to advertise the data publicly as an API using App Services, Web API, and API Management. See how it&#39;s easy to have customers request access to the data, subscribe to your service, and generate additional revenue.</p>
+<p>Essentially...</p>
+<p><img src="images/chapter0/profit.jpeg"  /></p>
+<h3 id="key-concepts-and-takeaways">Key concepts and takeaways</h3>
+<ul>
+<li>Navigating the Azure portal</li>
+<li>Using Azure Resource Groups to manage multiple Azure services</li>
+<li>Deploying a web app to Azure web app service</li>
+<li>Decomposing an ASP.NET Core 2.2 MVC app into decoupled Web API services</li>
+<li>Deploying an Azure SQL database</li>
+<li>Using Events Hubs, Azure Functions, and Cosmos DB to develop an aggregated datastore</li>
+<li>Using the Azure API Management service to create a subscription-based API offering  </li>
+</ul>
+<h3 id="agenda">Agenda</h3>
+<ul>
+<li>Chapter 0: Introduction</li>
+<li>Chapter 1: Getting Started in Azure</li>
+<li>Chapter 2: Connecting an Azure SQL Database</li>
+<li>Chapter 3: Increasing the Security of Deployed Apps</li>
+<li>Chapter 4: Decoupling Web Apps with a REST API Service Layer</li>
+<li>Chapter 5: Comsuming a REST API</li>
+<li>Chapter 6: Securing REST API Services with API Management</li>
+<li>Chapter 7: Consuming a Secure REST API</li>
+<li>Chapter 8: Introduction to the API Economy</li>
+<li>Chapter 9: Using Cosmos DB to store Aggregated Data</li>
+<li>Chapter 10: Exposing Aggregated Data for Profit</li>
+</ul>
+<h3 id="materials">Materials</h3>
+<p>You can find additional lab materials and presentation content at the locations below:</p>
+<ul>
+<li>Presentation: <a href="https://github.com/mikebranstein/global-azure-bootcamp-2019">https://github.com/mikebranstein/global-azure-bootcamp-2019</a></li>
+<li>Source code for the code used in this guide: <a href="https://github.com/mikebranstein/global-azure-bootcamp-2019">https://github.com/mikebranstein/global-azure-bootcamp-2019</a></li>
+<li>This guide: <a href="https://github.com/mikebranstein/global-azure-bootcamp-2019-instructions/">https://github.com/mikebranstein/global-azure-bootcamp-2019-instructions</a></li>
+</ul>
+<h3 id="creating-a-bootcamp-trial-subscription">Creating a Bootcamp Trial Subscription</h3>
+<p>There are several ways to get an Azure subscription, such as the free trial subscription, the pay-as-you-go subscription, which has no minimums or commitments and you can cancel any time; Enterprise agreement subscriptions, or you can buy one from a Microsoft retailer. In this exercise, you&#39;ll create a trial subscription using the code you were given at the bootcamp.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create a Subscription with the Bootcamp Trial
+</h4>
+
+<p>Browse to <a href="https://www.microsoftazurepass.com/">https://www.microsoftazurepass.com/</a>.</p>
+<p>Use the Azure Code on the handout you were given to get started.</p>
+<p>This concludes the exercise.</p>
+<div class="exercise-end"></div>
+
+
+<h3 id="creating-a-trial-azure-subscription">Creating a Trial Azure Subscription</h3>
+<blockquote>
+<p><strong>If you already have an Azure account</strong> </p>
+<p>If you have an Azure account already, you can skip this section. If you have a Visual Studio subscription (formerly known as an MSDN account), you get free Azure dollars every month. Check out the next section for activating these benefits.</p>
+</blockquote>
+<p>There are several ways to get an Azure subscription, such as the free trial subscription, the pay-as-you-go subscription, which has no minimums or commitments and you can cancel any time; Enterprise agreement subscriptions, or you can buy one from a Microsoft retailer. In exercise, you&#39;ll create a free trial subscription.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create a Free Trial Subscription
+</h4>
+
+<p>Browse to the following page <a href="http://azure.microsoft.com/en-us/pricing/free-trial/">http://azure.microsoft.com/en-us/pricing/free-trial/</a> to obtain a free trial account.</p>
+<p>Click <em>Start free</em>.</p>
+<p>Enter the credentials for the Microsoft account that you want to use. You will be redirected to the Sign up page.</p>
+<blockquote>
+<p><strong>Note</strong> </p>
+<p>Some of the following sections could be omitted in the Sign up process, if you recently verified your Microsoft account.</p>
+</blockquote>
+<p>If you already ahve an Azure subscription tied to your Microsoft account, you may see a screen like this:</p>
+<p><img src="images/chapter0/existing-subscription.png" class="img-medium" /></p>
+<p>You&#39;re wekcome you use your existing subscription for the bootcamp. If you&#39;re planningto use your existing subscription, you can skip this exercise. Click <em>Sign Up</em> to create a new subscription.</p>
+<p>Complete step 1 by entering your mobile phone number.</p>
+<p><img src="images/chapter0/verify.png" class="img-medium" /></p>
+<p>Select <em>Text me</em> or <em>Call me</em> to verify that you are a real person. Typein the verification code you receive on the phone or via text.</p>
+<p>Next, complete the Payment information section.</p>
+<blockquote>
+<p><strong>A Note about your Credit Card</strong> </p>
+<p>Your credit card will not be billed, unless you remove the spending limits. If you run out of credit, your services will be shut down unless you choose to be billed.</p>
+</blockquote>
+<p><img src="images/chapter0/payment.png" class="img-medium" /></p>
+<p>Press <em>Next</em> after completing the credit card section.</p>
+<p>In the <em>Technical Support</em> section, select the last option (No technical support) and click <em>Next</em>.</p>
+<p><img src="images/chapter0/tech-support.png" class="img-medium" /></p>
+<p>In the <em>Agreement</em> section, check the <em>I agree to the subscription Agreement</em>, <em>offer details</em>, and <em>privacy statement</em> option, and click <em>Sign up</em>.</p>
+<p>Your free subscription will be set up, and after a while, you can start using it. Notice that you will be informed when the subscription expires.</p>
+<p><img src="images/chapter0/agreement.png" class="img-medium" /></p>
+<p>Your free trial will expire in 29 days from it&#39;s creation.</p>
+<div class="exercise-end"></div>
+
+<h3 id="activating-visual-studio-subscription-benefits">Activating Visual Studio Subscription Benefits</h3>
+<p>If you happen to be a Visual Studio subscriber (formerly known as MSDN) you can activate your Azure Visual Studio subscription benefits. It is no charge, you can use your MSDN software in the cloud, and most importantly you get up to $150 in Azure credits every month. You can also get 33% discount in Virtual Machines and much more.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Activate Visual Studio Subscription Benefits
+</h4>
+
+<p>To active the Visual Studio subscription benefits, browse to the following URL: <a href="http://azure.microsoft.com/en-us/pricing/member-offers/msdn-benefits-details/">http://azure.microsoft.com/en-us/pricing/member-offers/msdn-benefits-details/</a></p>
+<p>Scroll down to see the full list of benefits you will get for being a MSDN member. There is even a FAQ section you can read.</p>
+<p>Click <em>Activate your monthly Azure credit</em> to activate the benefits.</p>
+<p><img src="images/chapter0/activate.png" class="img-medium" /></p>
+<p>You will need to enter your Microsoft account credentials to verify the subscription and complete the activation steps.</p>
+<div class="exercise-end"></div>
+
+<h3 id="preparing-your-azure-environment">Preparing your Azure environment</h3>
+<p>You might be wondering how you can participate in a cloud development workshop and not need any software installed.</p>
+<p>Thanks to the Azure Resource Manager and some nifty templates I put together, we&#39;re going to provision a virtual machine (VM) with Visual Studio (and all the tools you&#39;ll need) installed in your Azure subscription. From that point forward, you can work from the VM. </p>
+<p>It takes about 10 minutes to get the VM deployed to your subscription, so let&#39;s get started!</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Provisioning a Visual Studio Community VM in your Azure Subscription
+</h4>
+
+<p>Start by clicking the <em>Deploy to Azure</em> button below.</p>
+<p><a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmikebranstein%2Fvscommunity-workshop-vm%2Fmaster%2Ftemplate.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png" class="img-override" /></a></p>
+<p>This opens the Azure portal in a new tab of your browser. If you&#39;re prompted to sign in, do so. </p>
+<p>When the page loads, you&#39;ll see this custom deployment page:</p>
+<p><img src="images/chapter0/custom-deployment.png" class="img-override" /></p>
+<h4 id="under-basics-select-enter-the-following">Under <em>Basics</em>, select/enter the following</h4>
+<ul>
+<li>Subscription: <em>your Azure subscription</em></li>
+<li>Resource group: <em>Create new</em></li>
+<li>Resource group name: <em>workshop-rg</em>, or some other name that&#39;s easy to remember</li>
+<li>Location: <em>East US</em></li>
+</ul>
+<blockquote>
+<p><strong>Resource Groups</strong> </p>
+<p>Formally, resource groups provide a way to monitor, control access, provision and manage billing for collections of assets that are required to run an application, or used by a client or company department. Informally, think of resource groups like a file system folder, but instead of holding files and other folders, resource groups hold azure objects like storage accounts, web apps, functions, etc.</p>
+</blockquote>
+<blockquote>
+<p><strong>Naming Resource Groups</strong> </p>
+<p>I like to name my resource groups after their purpose, and append them with <em>-rg</em>, which signifies they are a resource group. </p>
+</blockquote>
+<h4 id="under-settings-enter">Under <em>Settings</em>, enter</h4>
+<ul>
+<li>Virtual Machine Name: <em>workshop-vm</em>, or some other name that is less than 15 characters long, and no special characters</li>
+<li>Admin Username: <em>your first name</em>, or some other username without spaces</li>
+<li>Admin Password: <em>P@ssW0rd1234</em>, or another 12-character password with upper, lower, numbers, and a special character </li>
+</ul>
+<blockquote>
+<p><strong>WARNING</strong> </p>
+<p>Do not forget your username and password. Write it down for today. </p>
+</blockquote>
+<h4 id="approving-the-purchase">Approving the &quot;Purchase&quot;</h4>
+<p>Scroll down to the bottom of the page and click two boxes:</p>
+<ol>
+<li>I agree to the terms and conditions stated above</li>
+<li>Pin to dashboard</li>
+</ol>
+<p>Press the <em>Purchase</em> button.</p>
+<h4 id="deploying-the-vm">Deploying the VM</h4>
+<p>After a few moments, the deployment of your VM will begin, and you&#39;ll see a status notification in the upper right:</p>
+<p><img src="images/chapter0/deployment-start1.png" class="img-override" /></p>
+<p>...and a deployment tile on your dashboard:</p>
+<p><img src="images/chapter0/deployment-start2.png" class="img-override" /></p>
+<p>Now, wait for about 10 minutes and your virtual machine will be deployed and ready to use.</p>
+<div class="exercise-end"></div>
+
+<p>That&#39;s it for the pre-requisites for today&#39;s workshop. Wait until your VM is created, and we&#39;ll be getting started soon!</p>
+
+			</div>
+			<hr>
+			<div class="chapter">
+				<h2 id="getting-started-in-azure">Getting started in Azure</h2>
+<h3 id="pre-requisites">Pre-requisites</h3>
+<p>Before we go any further, be sure you have all the pre-requisites downloaded and installed. You&#39;ll need the following:</p>
+<ul>
+<li>Microsoft Windows PC or Mac</li>
+<li>Evergreen web browser (Edge, Chrome, Firefox)</li>
+<li><a href="https://azure.microsoft.com">Azure Subscription</a> (trial is ok, and you should have already done this in the chapter 0)</li>
+<li>A Visual Studio Community edition VM running in Azure (see chapter 0 for setting this up)</li>
+</ul>
+<blockquote>
+<p><strong>NOTE</strong></p>
+<p>If you&#39;ve been following along, you should have all of these above items. </p>
+</blockquote>
+<h3 id="organizing-your-resources-in-the-azure-portal">Organizing your resources in the Azure portal</h3>
+<p>One of the most important aspects of your Azure subscription and using the Azure portal is organization. You can create a lot of Azure resources very quickly in the portal, and it can become cluttered quickly. So, it&#39;s important to start your Azure subscription off right.</p>
+<p>Our first stop will be to create a new Dashboard to organize our Azure resources we&#39;re building today.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Create a Dashboard
+</h4>
+
+<h4 id="creating-a-dashboard">Creating a Dashboard</h4>
+<p>We&#39;ll start by creating a dashboard. </p>
+<p>Login to the Azure portal, click <em>+</em>, give the dashboard name, and click <em>Done customizing</em>.</p>
+<p><img src="images/chapter1/new-dashboard.gif" class="img-medium" /></p>
+<p>That was easy! Dashboards are a quick way of organizing your Azure services. We like to create one for the workshop because it helps keep everything organized. You&#39;ll have a single place to go to find everything you build today.</p>
+<h4 id="pinning-a-resource-group-to-the-dashboard">Pinning a Resource Group to the Dashboard</h4>
+<p>Now that you have a new dashboard, let&#39;s put something on it. We&#39;ll be searching for the resource group you created in chapter 0 (the one that is holding your VM), and pinning it to this dashboard.</p>
+<blockquote>
+<p><strong>Resource Groups</strong> </p>
+<p>You&#39;ll recall from the last chapter that resource groups provide a way to monitor, control access, provision and manage billing for collections of assets that are required to run an application, or used by a client or company department. Informally, think of resource groups like a file system folder, but instead of holding files and other folders, resource groups hold azure objects like storage accounts, web apps, functions, etc.</p>
+</blockquote>
+<p>Start by searching for the resource group you created in chapter 0. My resource group was called <em>workshop-rg</em>. </p>
+<p><img src="images/chapter1/find-resource-group.gif" class="img-override" /></p>
+<p>Click in the search bar at the top. If you&#39;re lucky your resource group will be at the very top (like mine was). If not, type it&#39;s name and click on it.</p>
+<p>This opens the resource group. Next, click the <em>pin</em> icon at the upper-right to pin the resource group to your dashboard:</p>
+<p><img src="images/chapter1/pin-resource-group.png" class="img-large" /></p>
+<p>Finally, close the resource group, by clicking the <em>X</em> in the upper right corner (next to the <em>pin</em> icon). You should see the resource group pinned to your dashboard:</p>
+<p><img src="images/chapter1/pinned.png" class="img-medium" /></p>
+<p>Now that you have the VM&#39;s resource group pinned to your dashboard, it will be easy to locate the VM in later exercises.</p>
+<p>Go ahead and click ont he Virtual machine, then pin it to the dashboard. When you&#39;re finished, you should see something like this:</p>
+<p><img src="images/chapter1/vm-pin.gif" class="img-medium" /></p>
+<p>That wraps up the basics of creating dashboard, creating resource groups, and pinning resources to a dashboard. We&#39;re not going to take a deep dive into Azure Resource Group. If you&#39;re interested in learning more, check out this <a href="https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-portal">article</a>.</p>
+<h3 id="logging-into-your-virtual-machine">Logging into your virtual machine</h3>
+<p>Next, let&#39;s get logged into the VM that we created in chapter 0. </p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Logging into your VM
+</h4>
+
+<p>Start by navigating to your Azure portal dashboard. </p>
+<p>Locate the VM resource group you pinned earlier in this chapter and click on your virtual machine:</p>
+<p><img src="images/chapter1/click-vm.png" class="img-override" /></p>
+<p>Click the <em>Connect</em> button.</p>
+<p><img src="images/chapter1/connect.png"/></p>
+<p>This displays a download window on the right. Press the <em>Download RDP file</em> button.</p>
+<p><img src="images/chapter1/connect-download.png" /></p>
+<p>This downloads a file to your computer that will open in your Remote Desktop program.</p>
+<p><img src="images/chapter1/connect-download-2.png" /></p>
+<p>Click the downloaded file to open a connection to your VM. Enter your username and password you created earlier. </p>
+<p><img src="images/chapter1/connect-password.png" class="img-override" /></p>
+<p>Click <em>OK</em> to connect.</p>
+<p>If you&#39;re prompted by a security message, respond <em>Yes</em>:</p>
+<p><img src="images/chapter1/connect-security.png" class="img-override" /></p>
+<p>You&#39;re now connected to your VM. </p>
+<blockquote>
+<p><strong>Download additional software</strong></p>
+<p>If you&#39;re like me, you have a standard toolset you like to use. Please, download software for your VM and don&#39;t forget your browser of choice, Notepad++, Visual Studio Code, etc.</p>
+</blockquote>
+<p>This concludes the exercise.</p>
+<div class="exercise-end"></div>
+
+<p>Now that you&#39;re connected to your VM, you can continue to workshop from inside the VM. </p>
+<blockquote>
+<p><strong>Running a VM in Azure</strong> </p>
+<p>If you&#39;re worried about excessive charges to your Azure subscription because you&#39;re running a VM constantly, don&#39;t worry. This VM is programmed to shut itself down every evening at 7:00 PM EST. </p>
+</blockquote>
+<h3 id="clone-project-from-master-branch">Clone project from master branch</h3>
+<p>Let&#39;s get started by getting the <code>master</code> branch.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Getting the bootcamp files
+</h4>
+
+<p>Clone or download the <code>master</code> branch from <a href="https://github.com/mikebranstein/global-azure-bootcamp-2019">https://github.com/mikebranstein/global-azure-bootcamp-2019</a>.</p>
+<p>Use this <a href="https://github.com/mikebranstein/global-azure-bootcamp-2019/archive/master.zip">link</a> to download a zip file of the <code>master</code> branch.</p>
+<p><img src="images/chapter1/downloaded-zip.png" class="img-override" /></p>
+<blockquote>
+<p><strong>Unblock the .zip file!</strong> </p>
+<p>Don&#39;t open the zip file yet. You may need to unblock it first!</p>
+</blockquote>
+<p>If you&#39;re running Windows, right-click the zip file and go to the properties option. Check the <em>Unblock</em> option, press <em>Apply</em>, press <em>Ok</em>.</p>
+<p><img src="images/chapter1/unblock.gif" /></p>
+<p>Now it&#39;s safe to unzip the file. </p>
+<div class="exercise-end"></div>
+
+<h3 id="about-contoso-university">About Contoso University</h3>
+<p>The Contoso University web app is a small app that is used to manage the faculty, students, courses, and grades of Contoso University. It&#39;s not very advanced, but comes with pre-seeded data, and is ideal to demonstrate the concepts of this workshop.  </p>
+<h3 id="verify-the-site-works">Verify the site works</h3>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Compiling the solution
+</h4>
+
+<p>Before we can compile the solution, we need ot ensure .NET Core 2.2 is installed on your virtual machine.</p>
+<p>Locate and run <em>Visual Studio Installer</em> from the Start Menu:</p>
+<p><img src="images/chapter1/vs-installer.png" /></p>
+<p>Select the <em>Modify</em> option under Visual Studio 2019:</p>
+<p><img src="images/chapter1/modify.png" /></p>
+<p>On the right, expand the section labeled <em>.NET Core cross-platform development</em>, and check the box labeled <em>.NET Core 2.2 development tools</em>.</p>
+<p><img src="images/chapter1/core-22.png" /></p>
+<p>Click the <em>Modify</em> button on the bottom to install. The install takes approx. 5 minutes to complete.</p>
+<p>When the install is finished, you can update Visual Studio 2019 to the latest version (if you want), but it isn&#39;t necessary.</p>
+<p>Next, open the solution in <strong>Visual Studio 2019</strong> by double-clicking the <code>ContosoUniversity.sln</code> file in the <em>src</em> folder of the extracted files:</p>
+<p><img src="images/chapter1/solution-file.png" /></p>
+<blockquote>
+<p><strong>Logging into Visual Studio the first time</strong></p>
+<p>When you open Visual Studio the first time, it may take a few minutes. Be patient. You&#39;ll probably be prompted to sign in. Use your Microsoft account to sign in (the same one you used to sign up for the Azure trial).</p>
+</blockquote>
+<p>The opened solution should look like this:</p>
+<p><img src="images/chapter1/opened-solution.png" /></p>
+<p>Build and debug the solution. You should see the Speech Recognition site load in your browser.</p>
+<p><img src="images/chapter1/site.png" /></p>
+<p>This concludes the exercise.</p>
+<div class="exercise-end"></div>
+
+<p>That&#39;s it! You&#39;re up and running and ready to move on! In the next section, you&#39;ll learn how to deploy your website to Azure.</p>
+<h3 id="understanding-app-service-and-web-apps">Understanding App Service and Web Apps</h3>
+<p>In the last part of this chapter, you&#39;ll learn how to create an Azure Web App and deploy the Speech Service website to the cloud. In short, I like to think of Azure Web Apps like IIS in the cloud, but without the pomp and circumstance of setting up and configuring IIS.</p>
+<p>Web Apps are also part of a larger Azure service called the App Service, which is focused on helping you to build highly-scalable cloud apps focused on the web (via Web Apps), mobile (via Mobile Apps), APIs (via API Apps), and automated business processes (via Logic Apps). </p>
+<p>We don&#39;t have time to fully explore all of the components of the Azure App Service, so if you&#39;re interested, you can read more <a href="https://azure.microsoft.com/en-us/services/app-service/">online</a>.</p>
+<h4 id="what-is-an-azure-web-app-">What is an Azure Web App?</h4>
+<p>As we&#39;ve mentioned, Web Apps are like IIS in the cloud, but calling it that seems a bit unfair because there&#39;s quite a bit more to  Web Apps:</p>
+<ul>
+<li><p><strong>Websites and Web Apps:</strong> Web Apps let developers rapidly build, deploy, and manage powerful websites and web apps. Build standards-based web apps and APIs using .NET, Node.js, PHP, Python, and Java. Deliver both web and mobile apps for employees or customers using a single back end. Securely deliver APIs that enable additional apps and devices.</p>
+</li>
+<li><p><strong>Familiar and fast:</strong> Use your existing skills to code in your favorite language and IDE to build APIs and apps faster than ever. Access a rich gallery of pre-built APIs that make connecting to cloud services like Office 365 and Salesforce.com easy. Use templates to automate common workflows and accelerate your development. Experience unparalleled developer productivity with continuous integration using Visual Studio Team Services, GitHub, and live-site debugging.</p>
+</li>
+<li><p><strong>Enterprise grade:</strong> App Service is designed for building and hosting secure mission-critical applications. Build Azure Active Directory-integrated business apps that connect securely to on-premises resources, and then host them on a secure cloud platform that&#39;s compliant with ISO information security standard, SOC2 accounting standards, and PCI security standards. Automatically back up and restore your apps, all while enjoying enterprise-level SLAs.</p>
+</li>
+<li><p><strong>Build on Linux or bring your own Linux container image:</strong> Azure App Service provides default containers for versions of Node.js and PHP that make it easy to quickly get up and running on the service. With our new container support, developers can create a customized container based on the defaults. For example, developers could create a container with specific builds of Node.js and PHP that differ from the default versions provided by the service. This enables developers to use new or experimental framework versions that are not available in the default containers.</p>
+</li>
+<li><p><strong>Global scale:</strong> App Service provides availability and automatic scale on a global datacenter infrastructure. Easily scale applications up or down on demand, and get high availability within and across different geographical regions. Replicating data and hosting services in multiple locations is quick and easy, making expansion into new regions and geographies as simple as a mouse click.</p>
+</li>
+<li><p><strong>Optimized for DevOps:</strong> Focus on rapidly improving your apps without ever worrying about infrastructure. Deploy app updates with built-in staging, roll-back, testing-in-production, and performance testing capabilities. Achieve high availability with geo-distributed deployments. Monitor all aspects of your apps in real-time and historically with detailed operational logs. Never worry about maintaining or patching your infrastructure again.</p>
+</li>
+</ul>
+<h3 id="deploying-to-a-web-app-from-visual-studio">Deploying to a Web App from Visual Studio</h3>
+<p>Now that you understand the basics of web apps, let&#39;s create one and deploy our app to the cloud! </p>
+<p>Earlier in this chapter, you created a resource group to house resources for this workshop. You did this via the Azure Portal. You can also create Web Apps via the Azure portal in the same manner. But, I&#39;m going to show you another way of creating a Web App: from Visual Studio.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Deploying to a Web App from Visual Studio 2017
+</h4>
+
+<blockquote>
+<p><strong>Visual Studio 2019 Warning</strong> </p>
+<p>This exercise assumes you&#39;re running Visual Studio 2019. If you&#39;re not, please do.</p>
+</blockquote>
+<p>From Visual Studio, right-click the <em>ContosoUniversity</em> project and select <em>Publish</em>. In the web publish window, select <em>Microsoft Azure App Service</em>, <em>Create New</em>, and press <em>Publish</em>. This short clip walks you through the process:</p>
+<p><img src="images/chapter1/publish-web-app.gif" class="img-large" /></p>
+<p>On the next page, give your Web App a name, select your Azure subscription, and select the Resource Group you created earlier (mine was named <em>workshop-rg</em>), and create a new Free App Service Plan. Read below for more details.</p>
+<blockquote>
+<p><strong>Unique Web App Names</strong></p>
+<p>Because a web app&#39;s name is used as part of it&#39;s URL in Azure, you need to ensure it&#39;s name is unique. Luckily, Visual Studio will check to ensure your web app name is unique before it attempts to create it. In other words, don&#39;t try to use the web app name you see below, because I already used it.</p>
+</blockquote>
+<p><img src="images/chapter1/web-app-settings.png" class="img-override" /></p>
+<p>Click <em>New...</em> to create a new Web App plan.</p>
+<blockquote>
+<p><strong>Web App Plans</strong> </p>
+<p>Web App plans describe the performance needs of a web app. Plans range from free (where multiple web apps run on shared hardware) to not-so-free, where you have dedicated hardware, lots of processing power, RAM, and SSDs. To learn more about the various plans, check out this <a href="https://azure.microsoft.com/en-us/pricing/details/app-service/plans/">article</a>.</p>
+</blockquote>
+<p>Create a new free plan.</p>
+<p><img src="images/chapter1/new-plan.png" /></p>
+<p>After the plan is created, click <em>Create</em> to create the Web App in Azure.</p>
+<p>When the Azure Web App is created in Azure, Visual Studio will publish the app to the Web App. After the publish has finished, your browser window will launch, showing you your deployed website. </p>
+<blockquote>
+<p><strong>Web App URLs</strong></p>
+<p>The deployed web app has a URL of <em>Web App Name</em>.azurewebsites.net. Remember this URL, because you&#39;ll be using it in later chapters.</p>
+</blockquote>
+<p>One final note is to check the Azure Portal to see the App Service plan and Web App deployed to your resource group:</p>
+<p><img src="images/chapter1/deployed-webapp.png" class="img-override" /></p>
+<p>This concludes the exercise. </p>
+<div class="exercise-end"></div>
+			</div>
+			<hr>
+			<br />
+			<br />
+			<br />
+			<br />
+		</div>
+	</div>
+</div>
+
+<script src="scripts/built.js"></script>
+
+</body>
+</html>
