@@ -6,14 +6,14 @@ Welcome to our Terraform Workshop!
 
 Add more verbiage here.
 
-- VM image (Mike)
+- VM image (Mike) - DONE
     - Windows 10
     - Visual Studio 2019
     - .NET Core 2.2
     - VS Code
     - Terraform (in path)
     - Chrome pre-installed
-- Update the ARM Template to use stored VM image
+- Update the ARM Template to use stored VM image - DONE
 - Update ARM Template to include
     - Storage Account
 - Deployed VM & Storage Account from ARM Template
@@ -33,14 +33,16 @@ Web App (Mike)
 
 
 Potential agenda:
-- Brief Intro/Presentation/About Terraform
-- Chapter 0: Create an Azure Subscription if you need one
-- Chapter 1: Getting started quick
+- Brief Intro/Presentation/About Terraform - MIKE
+
+- Chapter 0: Create an Azure Subscription if you need one - MIKE
+
+- Chapter 1: Getting started quick - MIKE
     - Setup VM
     - Subscription ID & Tenant ID
     - Create RG view in portal
 
-- Chapter 2:
+- Chapter 2: - ERIC
     - Use new TF code to add:
         - RG
         - App Service Plan
@@ -50,24 +52,24 @@ Potential agenda:
     - Deploy this (w/o modules to Azure)
     - Test that website works (default IIS page)
 
-- Chatper 3: Modules
+- Chatper 3: Modules - ERIC
     - Refactor what we just deployed into a module-like process
     - Blow away existing RG
     - Re-deploy to dev
     - Deploy to production
 
-- Chapter 4: State management and adding a new module 
+- Chapter 4: State management and adding a new module - MIKE
     - Discuss State Management, why it's important
     - Setup TF Backend and explain chicken/egg scenario
     - Deploy, test, view statefile
 
-- Chapter 5: Add SQL and Deploy App
+- Chapter 5: Add SQL and Deploy App - MIKE
     - Add in SQL Database
     - Use VS to deploy the app to App Service
     - deploy to dev/prod
     - test
 
-- Chapter 6: Securing the web app with a WAF/App Gateway
+- Chapter 6: Securing the web app with a WAF/App Gateway - ERIC
     - Intro to WAF/App Gateway
     - Add WAF module (lot's of stuff)
     - Deploy to dev & prod
@@ -75,12 +77,6 @@ Potential agenda:
 
 - Closing remarks
 
-- Full Environment
-    - RG
-    - App Service Plan 
-    - App Service
-    - SQL Azure
-    - WAF / App Gateway
 
 
 

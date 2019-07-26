@@ -33,13 +33,117 @@
 				<h2 id="introduction">Introduction</h2>
 <p>Welcome to our Terraform Workshop! </p>
 <h3 id="about-the-workshop">About the Workshop</h3>
-<p>Some copy here...</p>
+<p>Add more verbiage here.</p>
+<ul>
+<li>VM image (Mike) - DONE<ul>
+<li>Windows 10</li>
+<li>Visual Studio 2019</li>
+<li>.NET Core 2.2</li>
+<li>VS Code</li>
+<li>Terraform (in path)</li>
+<li>Chrome pre-installed</li>
+</ul>
+</li>
+<li>Update the ARM Template to use stored VM image - DONE</li>
+<li>Update ARM Template to include<ul>
+<li>Storage Account</li>
+</ul>
+</li>
+<li><p>Deployed VM &amp; Storage Account from ARM Template</p>
+</li>
+<li><p>TF (Eric)</p>
+<ul>
+<li>Modular TF using Storage account as backend</li>
+<li>Module for App Service and SQL</li>
+<li>Module for Shared Services - WAF/App Gateway</li>
+<li>parameterization in modules<ul>
+<li>RG</li>
+<li>Environment</li>
+</ul>
+</li>
+<li>High-level Main.tf for dev and prod</li>
+</ul>
+</li>
+</ul>
+<p>Web App (Mike)</p>
+<pre><code>- Fabrikam
+- .NET Solution
+</code></pre><p>Potential agenda:</p>
+<ul>
+<li><p>Brief Intro/Presentation/About Terraform - MIKE</p>
+</li>
+<li><p>Chapter 0: Create an Azure Subscription if you need one - MIKE</p>
+</li>
+<li><p>Chapter 1: Getting started quick - MIKE</p>
+<ul>
+<li>Setup VM</li>
+<li>Subscription ID &amp; Tenant ID</li>
+<li>Create RG view in portal</li>
+</ul>
+</li>
+<li><p>Chapter 2: - ERIC</p>
+<ul>
+<li>Use new TF code to add:<ul>
+<li>RG</li>
+<li>App Service Plan</li>
+<li>App Service</li>
+</ul>
+</li>
+<li>A side callout/discussion on naming standards<ul>
+<li>lowercase, dashes, etc.</li>
+</ul>
+</li>
+<li>Deploy this (w/o modules to Azure)</li>
+<li>Test that website works (default IIS page)</li>
+</ul>
+</li>
+<li><p>Chatper 3: Modules - ERIC</p>
+<ul>
+<li>Refactor what we just deployed into a module-like process</li>
+<li>Blow away existing RG</li>
+<li>Re-deploy to dev</li>
+<li>Deploy to production</li>
+</ul>
+</li>
+<li><p>Chapter 4: State management and adding a new module - MIKE</p>
+<ul>
+<li>Discuss State Management, why it&#39;s important</li>
+<li>Setup TF Backend and explain chicken/egg scenario</li>
+<li>Deploy, test, view statefile</li>
+</ul>
+</li>
+<li><p>Chapter 5: Add SQL and Deploy App - MIKE</p>
+<ul>
+<li>Add in SQL Database</li>
+<li>Use VS to deploy the app to App Service</li>
+<li>deploy to dev/prod</li>
+<li>test</li>
+</ul>
+</li>
+<li><p>Chapter 6: Securing the web app with a WAF/App Gateway - ERIC</p>
+<ul>
+<li>Intro to WAF/App Gateway</li>
+<li>Add WAF module (lot&#39;s of stuff)</li>
+<li>Deploy to dev &amp; prod</li>
+<li>Test</li>
+</ul>
+</li>
+<li><p>Closing remarks</p>
+</li>
+</ul>
 <p>This years format will be a blend of brief presentations, followed by hands-on and guided labs. </p>
 <p>Our speakers include:</p>
 <ul>
-<li><a href="https://twitter.com/mikebranstein">Mike Branstein</a><ul>
+<li><p><a href="https://www.linkedin.com/in/eric-rhoads">Eric Rhoads</a></p>
+<ul>
+<li>Cloud Solution Architect (CSA), <a href="http://kizan.com">KiZAN Technologies</a></li>
+</ul>
+</li>
+<li><p><a href="https://twitter.com/mikebranstein">Mike Branstein</a></p>
+<ul>
 <li><a href="http://kizan.com">KiZAN Technologies</a></li>
 <li><a href="https://brosteins.com">Brosteins</a></li>
+<li><a href="https://www.linkedin.com/in/mikebranstein/">LinkedIn</a></li>
 </ul>
 </li>
 </ul>
