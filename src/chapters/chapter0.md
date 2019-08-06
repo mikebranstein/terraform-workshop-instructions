@@ -2,7 +2,39 @@
 
 Welcome to our Terraform Workshop! 
 
+We've been using Terraform to deploy Azure infrastructure for the past year, and have enjoyed the experience so much, we felt we needed to bring it to you. 
+
+### What is Terraform?
+
+[Terraform](https://www.terraform.io/) is an open source tool Hashicorp that allows you to safely and predictably create, change, and improve infrastructure. It codifies APIs into declarative configuration files that can be shared amongst team members, treated as code, edited, reviewed, and versioned.
+
+With Terraform you can:
+1. Write infrastructure as code
+2. Plan changes to your infrastructure
+3. Create reproducible infrastrcuture
+
+#### Write infrastructure as code
+
+With Terraform, you define infrastructure as code to increase productivity and transparency. Your Terraform can be (and should be) stored in a version control system, shared, and collaborated on by a team. With this approach, you track the incremental changes and historical state of your infrastructure. And, by nature, the codification of the infrastructure is automation friendly, so it can sit inside of a CICD pipeline to dynamically deploy infrastructure, then the code that runs on the infrastructure.
+
+#### Plan changes to your infrastructure
+
+Terraform provides an elegant user experience for teams to safely and predictably make changes to infrastructure. 
+
+Teams can understand how a minor change could have potential cascading effects across an infrastructure before executing that change (through a Terraform process called a plan). Terraform builds a dependency graph from the configurations, and walks this graph to generate plans, refresh state, and more.
+
+Terraform also separates the *plan* process discussed above from the *apply* process, which makes the changes to the infrastructure. Separating plans and applies reduces mistakes and uncertainty at scale. Plans show teams what would happen, applies execute changes.
+
+Terraform also have a rich library of infrastructure *providers* (Azure, AWS, GCP, OpenStack, VMware, Hyper-V, and more), which allow you to make changes across multiple on-premises and cloud environments at the same time. 
+
+#### Create reproducible infrastrcuture
+
+Terraform lets teams easily use the same configurations in multiple places to reduce mistakes and save time. You can use the same configuration files to deploy multiple identical environments. Common Terraform configurations (like SQL/IIS or LEAN/MEAN stack apps) can be packaged as modules and used across teams and organizations.
+
 ### About the Workshop
+
+
+#TODO: remove next section when finished
 
 Add more verbiage here.
 
@@ -77,18 +109,13 @@ Potential agenda:
 
 - Closing remarks
 
-
-
-
-This years format will be a blend of brief presentations, followed by hands-on and guided labs. 
-
 Our speakers include:
 
 * [Eric Rhoads](https://www.linkedin.com/in/eric-rhoads)
     * Cloud Solution Architect (CSA), [KiZAN Technologies](http://kizan.com)
 
 * [Mike Branstein](https://twitter.com/mikebranstein)
-    * [KiZAN Technologies](http://kizan.com)
+    * Cloud Solution Architect (CSA), [KiZAN Technologies](http://kizan.com)
     * [Brosteins](https://brosteins.com)
     * [LinkedIn](https://www.linkedin.com/in/mikebranstein/)
 
@@ -101,80 +128,44 @@ To get started you'll need the following pre-requisites. Please take a few momen
 
 ### What You're Building
 
-Azure is big. Really big. Too big to talk about all things Azure in a single day. 
+Using Terraform to deploy Azure infrastructure is easy, but there's a lot of different resources you could deploy - Azure is big. Really big. Too big to talk about all things Azure in a single day. 
 
-We've assembled an exciting workshop to introduce you to several Azure services that cloud developers should know about:
+We've assembled an exciting workshop to introduce you to several Azure services that infra and dev teams typically deploy:
+* [App Service Plan](https://docs.microsoft.com/en-us/azure/app-service/overview-hosting-plans)
 * [Web app](https://azure.microsoft.com/en-us/services/app-service/web/)
-* [Key Vault](https://azure.microsoft.com/en-us/services/key-vault/)
 * [Azure SQL Database](https://azure.microsoft.com/en-us/services/sql-database/)
-* [Event Hub](https://azure.microsoft.com/en-us/services/event-hubs/)
-* [Azure Functions](https://azure.microsoft.com/en-us/services/functions/)
-* [API Management](https://azure.microsoft.com/en-us/services/api-management/)
-* [Cosmos DB](https://azure.microsoft.com/en-us/services/cosmos-db/)
 * [Virtual Machines](https://azure.microsoft.com/en-us/services/virtual-machines/)
+* [App Gateway](https://docs.microsoft.com/en-us/azure/application-gateway/overview)
 
-In today's workshop, you'll get started with Azure and learn how to navigate through the Azure portal! You'll activate a free Azure subscription, learn about Resource Groups, and navigate through the Azure portal. You'll also create your development environment virtual machine running Visual Studio Community Edition.
+In this workshop, you'll learn be learning how to get started with Terraform and provision Azure resources. 
 
-Next, you'll learn about Platform as a Service (PaaS) offerings while creating a simple web app to manage data stored in an Azure SQL database. You'll finish by securing the data connection between your application and the database using an MSI (Managed Service Identity), then deploying to Azure services that host your web app.
+In chapter 2, you'll start by writing code to deploy Azure resource groups, an App Service Plan, and an App Service. 
 
-Once your app is up and running, we'll teach you how your app can be restructured for scalability by separating the backend data access later into a separately-hosted ASP.NET Web API app. You'll also learn how to secure your service.
+Then in chapter 3, you'll learn how to create reusage code modules to create identical dev and prod environments. 
 
-After you've built and deployed a REST API, you'll learn how you can use Azure Functions and Cosmos DB to aggregate your data and ready it for consumption by the public.
+Chapter 4 introduces you to Terraform state files, which is how Terraform manages the state of your infrastructure.
 
-Finally, after developing a database of publicly-consumable data, we'll explore how to advertise the data publicly as an API using App Services, Web API, and API Management. See how it's easy to have customers request access to the data, subscribe to your service, and generate additional revenue.
+In chapter 5, you'll add a SQL database to your infrastructure and deploy a web site.
 
-Essentially...
-
-<img src="images/chapter0/profit.jpeg"  />
-
+The workshop wraps up in chapter 6 by deploying an Azure App Gateway and Web Applicaiton Firewall (WAF) to protect the website you deployed previously.
 
 ### Key concepts and takeaways
 
 * Navigating the Azure portal
 * Using Azure Resource Groups to manage multiple Azure services
-* Deploying a web app to Azure web app service
-* Decomposing an ASP.NET Core 2.2 MVC app into decoupled Web API services
-* Deploying an Azure SQL database
-* Using Events Hubs, Azure Functions, and Cosmos DB to develop an aggregated datastore
-* Using the Azure API Management service to create a subscription-based API offering  
-
-### Agenda
-
-* Chapter 0: Introduction
-* Chapter 1: Getting Started in Azure
-* Chapter 2: Connecting an Azure SQL Database
-* Chapter 3: Increasing the Security of Deployed Apps
-* Chapter 4: Decoupling Web Apps with a REST API Service Layer
-* Chapter 5: Comsuming a REST API
-* Chapter 6: Securing REST API Services with API Management
-* Chapter 7: Consuming a Secure REST API
-* Chapter 8: Introduction to the API Economy
-* Chapter 9: Using Cosmos DB to store Aggregated Data
-* Chapter 10: Exposing Aggregated Data for Profit
+* Deploying a web app to Azure web app service using Terraform
+* Terraform naming conventions and standards 
+* Why Terraform state files are important and methods for managing state
+* Deploying Azure SQL databases and apps from Visual Studio
+* How Azure App Gateways and WAFs work, and how to deploy with Terraform
 
 ### Materials
 
 You can find additional lab materials and presentation content at the locations below:
 
-* Presentation: [https://github.com/mikebranstein/global-azure-bootcamp-2019](https://github.com/mikebranstein/global-azure-bootcamp-2019)
-* Source code for the code used in this guide: [https://github.com/mikebranstein/global-azure-bootcamp-2019](https://github.com/mikebranstein/global-azure-bootcamp-2019)
-* This guide: [https://github.com/mikebranstein/global-azure-bootcamp-2019-instructions](https://github.com/mikebranstein/global-azure-bootcamp-2019-instructions/)
-
-### Creating a Bootcamp Trial Subscription
-
-There are several ways to get an Azure subscription, such as the free trial subscription, the pay-as-you-go subscription, which has no minimums or commitments and you can cancel any time; Enterprise agreement subscriptions, or you can buy one from a Microsoft retailer. In this exercise, you'll create a trial subscription using the code you were given at the bootcamp.
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Create a Subscription with the Bootcamp Trial
-</h4>
-
-Browse to [https://www.microsoftazurepass.com/](https://www.microsoftazurepass.com/).
-
-Use the Azure Code on the handout you were given to get started.
-
-This concludes the exercise.
-
-<div class="exercise-end"></div>
+* Presentation: [https://github.com/mikebranstein/terraform-workshop](https://github.com/mikebranstein/terraform-workshop)
+* Source code for the code used in this guide: [https://github.com/mikebranstein/terraform-workshop](https://github.com/mikebranstein/terraform-workshop)
+* This guide: [https://github.com/mikebranstein/terraform-workshop-instructions](https://github.com/mikebranstein/terraform-workshop-instructions)
 
 
 ### Creating a Trial Azure Subscription
@@ -189,7 +180,7 @@ There are several ways to get an Azure subscription, such as the free trial subs
     <b>Exercise</b>: Create a Free Trial Subscription
 </h4>
 
-Browse to the following page http://azure.microsoft.com/en-us/pricing/free-trial/ to obtain a free trial account.
+Browse to the following page [http://azure.microsoft.com/en-us/pricing/free-trial/](http://azure.microsoft.com/en-us/pricing/free-trial/) to obtain a free trial account.
 
 Click *Start free*.
 
@@ -257,7 +248,7 @@ You will need to enter your Microsoft account credentials to verify the subscrip
 
 ### Preparing your Azure environment
 
-You might be wondering how you can participate in a cloud development workshop and not need any software installed.
+You might be wondering how you can participate in a cloud workshop and not need any software installed.
 
 Thanks to the Azure Resource Manager and some nifty templates I put together, we're going to provision a virtual machine (VM) with Visual Studio (and all the tools you'll need) installed in your Azure subscription. From that point forward, you can work from the VM. 
 
