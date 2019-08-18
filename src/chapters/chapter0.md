@@ -252,11 +252,65 @@ You might be wondering how you can participate in a cloud workshop and not need 
 
 Thanks to the Azure Resource Manager and some nifty templates I put together, we're going to provision a virtual machine (VM) with Visual Studio (and all the tools you'll need) installed in your Azure subscription. From that point forward, you can work from the VM. 
 
-It takes about 10 minutes to get the VM deployed to your subscription, so let's get started!
+It takes about 15 minutes to get the VM deployed to your subscription, so let's get started!
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Provisioning a Visual Studio Community VM in your Azure Subscription
 </h4>
+
+First, we'll createa storage account and copy a Windows VM image into the storage account.
+
+In the Azure portal, click the *Cloud Shell* link at the top:
+
+<img src="images/chapter0/cloud-shell.png" class="img-override" />
+
+If you've never opened a Cloud Shell, you may encounter a message like this:
+
+<img src="images/chapter0/cloud-shell-2.png" class="img-override" />
+
+If you see that message, select your Azure subscription and click *Create Storage*. Wait until you see a Cloud Shell (Bash) appear:
+
+<img src="images/chapter0/cloud-shell-3.png" class="img-override" />
+
+Using the Bash Cloud Shell, run various Azure CLI commands. 
+
+Create a resource group named workshop-vm-rg:
+
+```bash
+az group create --location eastus --name workshop-vm-rg
+```
+
+Create a storage account in the resource group. Be sure to replace <storage-account-name> with a random storage account name (It must be unique!). For example, I used *mysameb2019*:
+
+```bash
+az storage account create --name <storage-account-name> --resource-group workshop-vm-rg --location eastus
+```
+
+Create a container in your storage account to hold VHDs:
+
+```bash
+az storage container create --account-name <storage-account-name> --name vhds
+```
+
+Start copying the virtual machine image from my storage account to yours.
+
+```bash
+az storage blob copy start --account-name <storage-account-name> --destination-blob terraform-win10-vs2019-v2.vhd --destination-container vhds --source-uri https://workshopvhds.blob.core.windows.net/vhds/terraform-win10-vs2019-v2.vhd
+```
+
+This will begin the copying process, but the copy may take 5-10 mintues. Use this command to check the status of the copy:
+
+```bash
+az storage blob show --account-name <storage-account-name> --name terraform-win10-vs2019-v2.vhd --container-name vhds --query "properties.copy"
+```
+
+When you run this command, you'll see various status messages showing you the copy progress. Wait for the completionTime and progress status to show a completion. In the image below, you can see my copy has not yet completed, and the progress is 141942784/136365212160, or ~0.1%.
+
+<img src="images/chapter0/status-2.png" class="img-override" />
+
+Now that the copy has finished, get the URI of your virtual machine disk image. For example, it's https://storage-account-name}.blob.core.windows.net/vhds/terraform-win10-vs2019-v2.vhd. Keep this URI handy.
+
+#### Deploying the Virtual Machine
 
 Start by clicking the *Deploy to Azure* button below.
 
@@ -273,6 +327,7 @@ When the page loads, you'll see this custom deployment page:
 - Resource group: *Create new*
 - Resource group name: *workshop-rg*, or some other name that's easy to remember
 - Location: *East US*
+- Os Blob Uri: *the URI of the virtual machine image you just finished copying*
 
 > **Resource Groups** 
 >
@@ -287,6 +342,7 @@ When the page loads, you'll see this custom deployment page:
 - Virtual Machine Name: *workshop-vm*, or some other name that is less than 15 characters long, and no special characters
 - Admin Username: *your first name*, or some other username without spaces
 - Admin Password: *P@ssW0rd1234*, or another 12-character password with upper, lower, numbers, and a special character 
+- Os Blob URI: *https://{storage-account-name}.blob.core.windows.net/vhds/terraform-win10-vs2019-v2.vhd*
 
 > **WARNING** 
 >
@@ -294,9 +350,7 @@ When the page loads, you'll see this custom deployment page:
 
 #### Approving the "Purchase"
 
-Scroll down to the bottom of the page and click two boxes:
-1. I agree to the terms and conditions stated above
-2. Pin to dashboard
+Scroll down to the bottom of the page and click *I agree to the terms and conditions stated above*.
 
 Press the *Purchase* button.
 
