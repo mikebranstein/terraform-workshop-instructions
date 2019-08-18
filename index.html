@@ -595,6 +595,81 @@
 
 			</div>
 			<hr>
+			<div class="chapter">
+				<h2 id="adding-a-sql-server-and-deploying-your-app">Adding a SQL Server and Deploying your App</h2>
+<p>In this chapter, you&#39;ll learn how to:</p>
+<ul>
+<li>provision a SQL server using Terraform</li>
+<li>deploy a web application to the IaC environments</li>
+</ul>
+<h3 id="provisioning-a-sql-server">Provisioning a SQL Server</h3>
+<h3 id="verify-the-web-app-works">Verify the web app works</h3>
+<p>Before we deploy the web app, let&#39;s make sure it works. </p>
+<p>You&#39;ll recall that we downloaded a .zip file to your Terraform VM in an earlier chapter. Locate the zip file, unzip it, open the directory, and let&#39;s go.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Compiling the solution
+</h4>
+
+<p>Start by opening the solution in <strong>Visual Studio 2019</strong> by double-clicking the <code>ContosoUniversity.sln</code> file in the <em>src</em> folder of the extracted files:</p>
+<p><img src="images/chapter1/solution-file.png" /></p>
+<blockquote>
+<p><strong>Logging into Visual Studio the first time</strong></p>
+<p>When you open Visual Studio the first time, it may take a few minutes. Be patient. You&#39;ll probably be prompted to sign in. Use your Microsoft account to sign in (the same one you used to sign up for the Azure trial).</p>
+</blockquote>
+<p>The opened solution should look like this:</p>
+<p><img src="images/chapter1/opened-solution.png" /></p>
+<p>Build and debug the solution. You should see the site load in your browser.</p>
+<p><img src="images/chapter1/site.png" /></p>
+<p>This concludes the exercise.</p>
+<div class="exercise-end"></div>
+
+<p>That&#39;s it! You&#39;re up and running and ready to move on! In the next section, you&#39;ll learn how to deploy your website to Azure.</p>
+<h3 id="understanding-app-service-and-web-apps">Understanding App Service and Web Apps</h3>
+<p>In the last part of this chapter, you&#39;ll learn how to deploy a web app to an Azure Web App provisioned by Terraform. In short, I like to think of Azure Web Apps like IIS in the cloud, but without the pomp and circumstance of setting up and configuring IIS.</p>
+<p>Web Apps are also part of a larger Azure service called the App Service, which is focused on helping you to build highly-scalable cloud apps focused on the web (via Web Apps), mobile (via Mobile Apps), APIs (via API Apps), and automated business processes (via Logic Apps). </p>
+<p>We don&#39;t have time to fully explore all of the components of the Azure App Service, so if you&#39;re interested, you can read more <a href="https://azure.microsoft.com/en-us/services/app-service/">online</a>.</p>
+<h4 id="what-is-an-azure-web-app-">What is an Azure Web App?</h4>
+<p>As we&#39;ve mentioned, Web Apps are like IIS in the cloud, but calling it that seems a bit unfair because there&#39;s quite a bit more to  Web Apps:</p>
+<ul>
+<li><p><strong>Websites and Web Apps:</strong> Web Apps let developers rapidly build, deploy, and manage powerful websites and web apps. Build standards-based web apps and APIs using .NET, Node.js, PHP, Python, and Java. Deliver both web and mobile apps for employees or customers using a single back end. Securely deliver APIs that enable additional apps and devices.</p>
+</li>
+<li><p><strong>Familiar and fast:</strong> Use your existing skills to code in your favorite language and IDE to build APIs and apps faster than ever. Access a rich gallery of pre-built APIs that make connecting to cloud services like Office 365 and Salesforce.com easy. Use templates to automate common workflows and accelerate your development. Experience unparalleled developer productivity with continuous integration using Visual Studio Team Services, GitHub, and live-site debugging.</p>
+</li>
+<li><p><strong>Enterprise grade:</strong> App Service is designed for building and hosting secure mission-critical applications. Build Azure Active Directory-integrated business apps that connect securely to on-premises resources, and then host them on a secure cloud platform that&#39;s compliant with ISO information security standard, SOC2 accounting standards, and PCI security standards. Automatically back up and restore your apps, all while enjoying enterprise-level SLAs.</p>
+</li>
+<li><p><strong>Build on Linux or bring your own Linux container image:</strong> Azure App Service provides default containers for versions of Node.js and PHP that make it easy to quickly get up and running on the service. With our new container support, developers can create a customized container based on the defaults. For example, developers could create a container with specific builds of Node.js and PHP that differ from the default versions provided by the service. This enables developers to use new or experimental framework versions that are not available in the default containers.</p>
+</li>
+<li><p><strong>Global scale:</strong> App Service provides availability and automatic scale on a global datacenter infrastructure. Easily scale applications up or down on demand, and get high availability within and across different geographical regions. Replicating data and hosting services in multiple locations is quick and easy, making expansion into new regions and geographies as simple as a mouse click.</p>
+</li>
+<li><p><strong>Optimized for DevOps:</strong> Focus on rapidly improving your apps without ever worrying about infrastructure. Deploy app updates with built-in staging, roll-back, testing-in-production, and performance testing capabilities. Achieve high availability with geo-distributed deployments. Monitor all aspects of your apps in real-time and historically with detailed operational logs. Never worry about maintaining or patching your infrastructure again.</p>
+</li>
+</ul>
+<h3 id="deploying-to-a-web-app-from-visual-studio">Deploying to a Web App from Visual Studio</h3>
+<p>Now that you understand the basics of web apps, let&#39;s create one and deploy our app to the cloud! </p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Deploying to a Web App from Visual Studio 2019
+</h4>
+
+<p>In this exercise, let&#39;s start by deploying to the dev site. We won&#39;t actually deploy to the prod site, but that should be easy enough to do on your own once you&#39;ve done it in dev.</p>
+<p>Before we deploy the web app, let&#39;s take a moment to update the database connection string with the proper settings.</p>
+<p>Open the appsettings.json file and replace the <em>DefaultConnection</em> database connection string with the connection string to your SQL database. Remember, you saved this connection string earlier in the chapter.</p>
+<p><img src="images/chapter5/appsettings.png" class="img-small" /></p>
+<p>With the connection string updated, let&#39;s start the deployment process.</p>
+<p>From Visual Studio, right-click the <em>ContosoUniversity</em> project and select <em>Publish</em>. In the web publish window, select <em>Microsoft Azure App Service</em>, <em>Select Existing</em>, and press <em>Publish</em>. </p>
+<p>On the next page, select your Azure subscription, and select the Resource Group you created with Terraform earlier (mine was named <em>workshop-rg</em>), then select the dev web app created by your Terraform code. </p>
+<p>Press <em>OK</em>.</p>
+<p>After the web app is deployed, it will open the site. You should see the Contoso University site displayed.</p>
+<p>This concludes the exercise. </p>
+<div class="exercise-end"></div>
+
+<blockquote>
+<p><strong>Don&#39;t forget about Prod!</strong></p>
+<p>Just in case you forgot, make sure you deploy the web app to prod before continuing.</p>
+</blockquote>
+<p>Bravo! You&#39;ve deployed a web app t the infrastructure you created via Terraform. This concludes the chapter, but the story isn&#39;t finished. In the next chapter, you&#39;ll learn how to secure your web apps by using an Azure App Gateway and Web Application Firewall (provisioned with Terraform, of course).</p>
+
+			</div>
+			<hr>
 			<br />
 			<br />
 			<br />
