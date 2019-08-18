@@ -90,7 +90,7 @@ DONE - Chapter 0: Create an Azure Subscription if you need one - MIKE
     - Re-deploy to dev
     - Deploy to production
 
-- Chapter 4: State management and adding a new module - MIKE
+DONE - Chapter 4: State management and adding a new module - MIKE
     - Discuss State Management, why it's important
     - Setup TF Backend and explain chicken/egg scenario
     - Deploy, test, view statefile
