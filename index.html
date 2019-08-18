@@ -89,10 +89,10 @@
 - .NET Solution
 </code></pre><p>Potential agenda:</p>
 <ul>
-<li><p>Brief Intro/Presentation/About Terraform - MIKE</p>
-</li>
-<li><p>Chapter 0: Create an Azure Subscription if you need one - MIKE</p>
-</li>
+<li>Brief Intro/Presentation/About Terraform - MIKE</li>
+</ul>
+<p>DONE - Chapter 0: Create an Azure Subscription if you need one - MIKE</p>
+<ul>
 <li><p>Chapter 1: Getting started quick - MIKE</p>
 <ul>
 <li>Setup VM</li>
@@ -416,107 +416,26 @@
 <h3 id="clone-project-from-master-branch">Clone project from master branch</h3>
 <p>Let&#39;s get started by getting the <code>master</code> branch.</p>
 <h4 class="exercise-start">
-    <b>Exercise</b>: Getting the bootcamp files
+    <b>Exercise</b>: Getting the workshop files
 </h4>
 
-<p>Clone or download the <code>master</code> branch from <a href="https://github.com/mikebranstein/global-azure-bootcamp-2019">https://github.com/mikebranstein/global-azure-bootcamp-2019</a>.</p>
-<p>Use this <a href="https://github.com/mikebranstein/global-azure-bootcamp-2019/archive/master.zip">link</a> to download a zip file of the <code>master</code> branch.</p>
-<p><img src="images/chapter1/downloaded-zip.png" class="img-override" /></p>
+<p>Clone or download the <code>master</code> branch from <a href="https://github.com/mikebranstein/terraform-workshop">https://github.com/mikebranstein/terraform-workshop</a>.</p>
+<p>Use this <a href="https://github.com/mikebranstein/terraform-workshop/archive/master.zip">link</a> to download a zip file of the <code>master</code> branch.</p>
+<p><img src="images/chapter1/downloaded-zip.png" class="img-small" /></p>
 <blockquote>
 <p><strong>Unblock the .zip file!</strong> </p>
 <p>Don&#39;t open the zip file yet. You may need to unblock it first!</p>
 </blockquote>
-<p>If you&#39;re running Windows, right-click the zip file and go to the properties option. Check the <em>Unblock</em> option, press <em>Apply</em>, press <em>Ok</em>.</p>
+<p>If you&#39;re running Windows, right-click the zip file and go to the properties option. Check the <em>Unblock</em> option, press <em>Apply</em>, press <em>Ok</em>. Don&#39;t worry that the image below has a different file name - it&#39;s the same process.</p>
 <p><img src="images/chapter1/unblock.gif" /></p>
 <p>Now it&#39;s safe to unzip the file. </p>
 <div class="exercise-end"></div>
 
 <h3 id="about-contoso-university">About Contoso University</h3>
-<p>The Contoso University web app is a small app that is used to manage the faculty, students, courses, and grades of Contoso University. It&#39;s not very advanced, but comes with pre-seeded data, and is ideal to demonstrate the concepts of this workshop.  </p>
-<h3 id="verify-the-site-works">Verify the site works</h3>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Compiling the solution
-</h4>
+<p>The Contoso University web app is a small app that is used to manage the faculty, students, courses, and grades of Contoso University. It&#39;s not very advanced, but comes with pre-seeded data, and is ideal to demonstrate the concepts of this workshop. </p>
+<p>You won&#39;t be using it until later in the workshop, but it&#39;s good to have it downloaded now.</p>
+<p>This completed the chapter.</p>
 
-<p>Before we can compile the solution, we need ot ensure .NET Core 2.2 is installed on your virtual machine.</p>
-<p>Locate and run <em>Visual Studio Installer</em> from the Start Menu:</p>
-<p><img src="images/chapter1/vs-installer.png" /></p>
-<p>Select the <em>Modify</em> option under Visual Studio 2019:</p>
-<p><img src="images/chapter1/modify.png" /></p>
-<p>On the right, expand the section labeled <em>.NET Core cross-platform development</em>, and check the box labeled <em>.NET Core 2.2 development tools</em>.</p>
-<p><img src="images/chapter1/core-22.png" /></p>
-<p>Click the <em>Modify</em> button on the bottom to install. The install takes approx. 5 minutes to complete.</p>
-<p>When the install is finished, you can update Visual Studio 2019 to the latest version (if you want), but it isn&#39;t necessary.</p>
-<p>Next, open the solution in <strong>Visual Studio 2019</strong> by double-clicking the <code>ContosoUniversity.sln</code> file in the <em>src</em> folder of the extracted files:</p>
-<p><img src="images/chapter1/solution-file.png" /></p>
-<blockquote>
-<p><strong>Logging into Visual Studio the first time</strong></p>
-<p>When you open Visual Studio the first time, it may take a few minutes. Be patient. You&#39;ll probably be prompted to sign in. Use your Microsoft account to sign in (the same one you used to sign up for the Azure trial).</p>
-</blockquote>
-<p>The opened solution should look like this:</p>
-<p><img src="images/chapter1/opened-solution.png" /></p>
-<p>Build and debug the solution. You should see the Speech Recognition site load in your browser.</p>
-<p><img src="images/chapter1/site.png" /></p>
-<p>This concludes the exercise.</p>
-<div class="exercise-end"></div>
-
-<p>That&#39;s it! You&#39;re up and running and ready to move on! In the next section, you&#39;ll learn how to deploy your website to Azure.</p>
-<h3 id="understanding-app-service-and-web-apps">Understanding App Service and Web Apps</h3>
-<p>In the last part of this chapter, you&#39;ll learn how to create an Azure Web App and deploy the Speech Service website to the cloud. In short, I like to think of Azure Web Apps like IIS in the cloud, but without the pomp and circumstance of setting up and configuring IIS.</p>
-<p>Web Apps are also part of a larger Azure service called the App Service, which is focused on helping you to build highly-scalable cloud apps focused on the web (via Web Apps), mobile (via Mobile Apps), APIs (via API Apps), and automated business processes (via Logic Apps). </p>
-<p>We don&#39;t have time to fully explore all of the components of the Azure App Service, so if you&#39;re interested, you can read more <a href="https://azure.microsoft.com/en-us/services/app-service/">online</a>.</p>
-<h4 id="what-is-an-azure-web-app-">What is an Azure Web App?</h4>
-<p>As we&#39;ve mentioned, Web Apps are like IIS in the cloud, but calling it that seems a bit unfair because there&#39;s quite a bit more to  Web Apps:</p>
-<ul>
-<li><p><strong>Websites and Web Apps:</strong> Web Apps let developers rapidly build, deploy, and manage powerful websites and web apps. Build standards-based web apps and APIs using .NET, Node.js, PHP, Python, and Java. Deliver both web and mobile apps for employees or customers using a single back end. Securely deliver APIs that enable additional apps and devices.</p>
-</li>
-<li><p><strong>Familiar and fast:</strong> Use your existing skills to code in your favorite language and IDE to build APIs and apps faster than ever. Access a rich gallery of pre-built APIs that make connecting to cloud services like Office 365 and Salesforce.com easy. Use templates to automate common workflows and accelerate your development. Experience unparalleled developer productivity with continuous integration using Visual Studio Team Services, GitHub, and live-site debugging.</p>
-</li>
-<li><p><strong>Enterprise grade:</strong> App Service is designed for building and hosting secure mission-critical applications. Build Azure Active Directory-integrated business apps that connect securely to on-premises resources, and then host them on a secure cloud platform that&#39;s compliant with ISO information security standard, SOC2 accounting standards, and PCI security standards. Automatically back up and restore your apps, all while enjoying enterprise-level SLAs.</p>
-</li>
-<li><p><strong>Build on Linux or bring your own Linux container image:</strong> Azure App Service provides default containers for versions of Node.js and PHP that make it easy to quickly get up and running on the service. With our new container support, developers can create a customized container based on the defaults. For example, developers could create a container with specific builds of Node.js and PHP that differ from the default versions provided by the service. This enables developers to use new or experimental framework versions that are not available in the default containers.</p>
-</li>
-<li><p><strong>Global scale:</strong> App Service provides availability and automatic scale on a global datacenter infrastructure. Easily scale applications up or down on demand, and get high availability within and across different geographical regions. Replicating data and hosting services in multiple locations is quick and easy, making expansion into new regions and geographies as simple as a mouse click.</p>
-</li>
-<li><p><strong>Optimized for DevOps:</strong> Focus on rapidly improving your apps without ever worrying about infrastructure. Deploy app updates with built-in staging, roll-back, testing-in-production, and performance testing capabilities. Achieve high availability with geo-distributed deployments. Monitor all aspects of your apps in real-time and historically with detailed operational logs. Never worry about maintaining or patching your infrastructure again.</p>
-</li>
-</ul>
-<h3 id="deploying-to-a-web-app-from-visual-studio">Deploying to a Web App from Visual Studio</h3>
-<p>Now that you understand the basics of web apps, let&#39;s create one and deploy our app to the cloud! </p>
-<p>Earlier in this chapter, you created a resource group to house resources for this workshop. You did this via the Azure Portal. You can also create Web Apps via the Azure portal in the same manner. But, I&#39;m going to show you another way of creating a Web App: from Visual Studio.</p>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Deploying to a Web App from Visual Studio 2017
-</h4>
-
-<blockquote>
-<p><strong>Visual Studio 2019 Warning</strong> </p>
-<p>This exercise assumes you&#39;re running Visual Studio 2019. If you&#39;re not, please do.</p>
-</blockquote>
-<p>From Visual Studio, right-click the <em>ContosoUniversity</em> project and select <em>Publish</em>. In the web publish window, select <em>Microsoft Azure App Service</em>, <em>Create New</em>, and press <em>Publish</em>. This short clip walks you through the process:</p>
-<p><img src="images/chapter1/publish-web-app.gif" class="img-large" /></p>
-<p>On the next page, give your Web App a name, select your Azure subscription, and select the Resource Group you created earlier (mine was named <em>workshop-rg</em>), and create a new Free App Service Plan. Read below for more details.</p>
-<blockquote>
-<p><strong>Unique Web App Names</strong></p>
-<p>Because a web app&#39;s name is used as part of it&#39;s URL in Azure, you need to ensure it&#39;s name is unique. Luckily, Visual Studio will check to ensure your web app name is unique before it attempts to create it. In other words, don&#39;t try to use the web app name you see below, because I already used it.</p>
-</blockquote>
-<p><img src="images/chapter1/web-app-settings.png" class="img-override" /></p>
-<p>Click <em>New...</em> to create a new Web App plan.</p>
-<blockquote>
-<p><strong>Web App Plans</strong> </p>
-<p>Web App plans describe the performance needs of a web app. Plans range from free (where multiple web apps run on shared hardware) to not-so-free, where you have dedicated hardware, lots of processing power, RAM, and SSDs. To learn more about the various plans, check out this <a href="https://azure.microsoft.com/en-us/pricing/details/app-service/plans/">article</a>.</p>
-</blockquote>
-<p>Create a new free plan.</p>
-<p><img src="images/chapter1/new-plan.png" /></p>
-<p>After the plan is created, click <em>Create</em> to create the Web App in Azure.</p>
-<p>When the Azure Web App is created in Azure, Visual Studio will publish the app to the Web App. After the publish has finished, your browser window will launch, showing you your deployed website. </p>
-<blockquote>
-<p><strong>Web App URLs</strong></p>
-<p>The deployed web app has a URL of <em>Web App Name</em>.azurewebsites.net. Remember this URL, because you&#39;ll be using it in later chapters.</p>
-</blockquote>
-<p>One final note is to check the Azure Portal to see the App Service plan and Web App deployed to your resource group:</p>
-<p><img src="images/chapter1/deployed-webapp.png" class="img-override" /></p>
-<p>This concludes the exercise. </p>
-<div class="exercise-end"></div>
 			</div>
 			<hr>
 			<div class="chapter">

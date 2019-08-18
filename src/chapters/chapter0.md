@@ -67,7 +67,7 @@ Web App (Mike)
 Potential agenda:
 - Brief Intro/Presentation/About Terraform - MIKE
 
-- Chapter 0: Create an Azure Subscription if you need one - MIKE
+DONE - Chapter 0: Create an Azure Subscription if you need one - MIKE
 
 - Chapter 1: Getting started quick - MIKE
     - Setup VM
