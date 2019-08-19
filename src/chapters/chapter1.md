@@ -86,7 +86,7 @@ This creates a security account (or Azure service principal, "aka a service acco
 
 Next, give the virtual machine *Contributor* rights to your Azure subscription. Follow this quick video to see how you can do that:
 
-<img src="images/chapter1/identity-2.gif" />
+<img src="images/chapter1/identity-2.gif" class="img-override" />
 
 This concludes the exercise.
 

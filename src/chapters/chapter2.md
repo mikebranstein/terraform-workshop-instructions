@@ -42,7 +42,7 @@ Make sure to place your Azure Tenant and Subscription ID inside the quotes next 
 >
 > If you're unfamiliar with Azure, you may be wondering where to find these values. Check out the quick video below on where to find these values.
 
-<img src="images/chapter2/ids.gif" />
+<img src="images/chapter2/ids.gif" class="img-override" />
 
 <div class="exercise-end"></div>
 
