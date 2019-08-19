@@ -1,0 +1,6 @@
+- Chapter 6: Securing the web app with a WAF/App Gateway
+    - Intro to WAF/App Gateway
+    - Add WAF modules (core and shared services)
+    - Deploy to dev & prod
+    - Test
+    - Closing Remarks
