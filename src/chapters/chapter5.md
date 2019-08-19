@@ -6,6 +6,125 @@ In this chapter, you'll learn how to:
 
 ### Provisioning a SQL Server
 
+Every great app needs a database, am i right? Myabe not, but we'll be provisioning an Azure SQL database regardless ;-)
+
+> **What is Azure SQL Database?**
+>
+> Azure SQL Database is a general-purpose relational database-as-a-service (DBaaS) based on the latest stable version of Microsoft SQL Server Database Engine. SQL Database is a high-performance, reliable, and secure cloud database that you can use to build data-driven applications and websites in the programming language of your choice, without needing to manage infrastructure.
+
+We'll be using Azure SQL Databases because they're easy to create, inexpensive, and the foundation of many apps in Azure. 
+
+Let's get to it.
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Adding an Azure SQL Database to Terraform
+</h4>
+
+Start by opening the *standard_application* module's main.tf file. Add the following to the bottom:
+
+```
+resource "azurerm_sql_server" "standard_sql_server" {
+  name                         = "tf-az-standard-sql-${var.environment}"
+  resource_group_name          = "${azurerm_resource_group.application_rg.name}"
+  location                     = "${var.location}"
+  version                      = "12.0"
+  administrator_login          = "${var.sql_administrator_login}"
+  administrator_login_password = "${var.sql_administrator_password}"
+}
+
+resource "azurerm_sql_database" "app1_db" {
+  name                = "tf-az-${var.application_name}--${var.environment}-db"
+  resource_group_name = "${azurerm_resource_group.application_rg.name}"
+  location            = "${var.location}"
+  server_name         = "${azurerm_sql_server.standard_sql_server.name}"
+}
+```
+
+The first declaration creates an Azure SQL Server named `tf-az-standard-sql-{env}`. The second adds a database named `tf-az-${var.application_name}--${var.environment}-db` to the SQL Server.
+
+#### Update the module variables
+
+You may have noticed we're using several new variables. Let's add them to the end of the variables.tf file:
+
+```
+variable "sql_administrator_login" {
+    description = "Login for the Managed SQL Instance"
+}
+
+variable "sql_administrator_password" {
+    description = "Password for the Managed SQL Instance"
+}
+```
+
+#### Supply the module with variable values
+
+After adding the variables, update the supplied values of the variables in your main.tf files (dev and prod) with the supplied values.
+
+For dev:
+
+```
+module "standard_application" {
+    source                     = "../_modules/standard_application/"
+
+    environment                = "dev"
+    application_name           = "app1"
+    location                   = "East US"
+    application_plan_tier      = "Basic"
+    application_plan           = "B1"
+    sql_administrator_login    = "sqladmin"
+    sql_administrator_password = "SQLP@ss123"
+}
+```
+
+...and prod:
+
+```
+module "standard_application" {
+    source                     = "../_modules/standard_application/"
+
+    environment                = "prod"
+    application_name           = "app1"
+    location                   = "East US"
+    application_plan_tier      = "Basic"
+    application_plan           = "B1"
+    sql_administrator_login    = "sqladmin"
+    sql_administrator_password = "SQLP@ss123"
+}
+```
+
+#### Testing your changes
+
+Navigate to the dev folder, initialize Terraform:
+
+```bash
+terraform init
+```
+
+Run a plan to check out what's going to happen:
+
+```bash
+terraform plan
+```
+
+And apply the changes:
+
+```bash
+terraform apply
+```
+
+Go out to the Azure portal and check to see the resources have been created. 
+
+#### Getting the connection string to your database
+
+Navigate to your dev SQL Database, and click on the *Connection strings* blade:
+
+<img src="images/chapter5/connection-strings.png" class="img-small" />
+
+Copy the ADO.NET connection string and save it - you'll need this in the next step.
+
+This concludes the exercise.
+
+<div class="exercise-end"></div>
 
 
 ### Verify the web app works
