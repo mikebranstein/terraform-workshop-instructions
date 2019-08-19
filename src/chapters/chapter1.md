@@ -177,4 +177,5 @@ The Contoso University web app is a small app that is used to manage the faculty
 
 You won't be using it until later in the workshop, but it's good to have it downloaded now.
 
-This completed the chapter.
+This completes the chapter.
+
