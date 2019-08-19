@@ -177,7 +177,7 @@ Navigate to the dev directory, where main.tf exists. Initialize Terraform.
 
 ```bash
 terraform init
-````
+```
 
 > **But I already initialized once**
 >
