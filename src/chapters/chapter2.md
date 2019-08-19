@@ -44,6 +44,10 @@ Make sure to place your Azure Tenant and Subscription ID inside the quotes next 
 
 <img src="images/chapter2/ids.gif" class="img-override" />
 
+Note - your Tenant ID is the Azure Active Directory Directory ID.
+
+This concludes the exercise.
+
 <div class="exercise-end"></div>
 
 ### Declaring Resources
@@ -129,7 +133,7 @@ resource "azurerm_app_service" "app1_app_service" {
     name = "tf-az-app1-dev-app"
     location = "East US"
     resource_group_name = "${azurerm_resource_group.application_rg.name}"
-    app_service_plan_id = "${azurerm_app_service_plan.app_plan.id}"
+    app_service_plan_id = "${azurerm_app_service_plan.standard_app_plan.id}"
 }
 ```
 
@@ -163,7 +167,17 @@ resource "azurerm_sql_database" "app1_db" {
   location            = "East US"
   server_name         = "${azurerm_sql_server.standard_sql_server.name}"
 }
+
+resource "azurerm_sql_firewall_rule" "test" {
+  name                = "tf-az-app1-allow-azure-sqlfw"
+  resource_group_name = "${azurerm_resource_group.application_rg.name}"
+  server_name         = "${azurerm_sql_server.standard_sql_server.name}"
+  start_ip_address    = "0.0.0.0" # tells Azure to allow Azure services
+  end_ip_address      = "0.0.0.0" # tells Azure to allow Azure serivces
+}
 ```
+
+The first declaration creates an Azure SQL Server, the second creates a database, and the third enables other Azure services (like Web Apps) to talk to the SQL Server.
 
 This concludes the exercise.
 
@@ -189,12 +203,6 @@ In the terminal, navigate to the C:\terraform folder, where you created the main
 
 ```
 cd c:\terraform 
-```
-
-Login to Azure using the --identity flag, which uses the virtual machine's service account (which you created in chapter 1) to access Azure.
-
-```bash
-az login --identity
 ```
 
 Initialize Terraform:

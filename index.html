@@ -487,6 +487,8 @@
 <p>If you&#39;re unfamiliar with Azure, you may be wondering where to find these values. Check out the quick video below on where to find these values.</p>
 </blockquote>
 <p><img src="images/chapter2/ids.gif" class="img-override" /></p>
+<p>Note - your Tenant ID is the Azure Active Directory Directory ID.</p>
+<p>This concludes the exercise.</p>
 <div class="exercise-end"></div>
 
 <h3 id="declaring-resources">Declaring Resources</h3>
@@ -547,7 +549,7 @@ resource &quot;azurerm_resource_group&quot; &quot;application_rg&quot; {
     name = &quot;tf-az-app1-dev-app&quot;
     location = &quot;East US&quot;
     resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
-    app_service_plan_id = &quot;${azurerm_app_service_plan.app_plan.id}&quot;
+    app_service_plan_id = &quot;${azurerm_app_service_plan.standard_app_plan.id}&quot;
 }
 </code></pre><blockquote>
 <p><strong>A few words on naming conventions</strong></p>
@@ -575,7 +577,16 @@ resource &quot;azurerm_sql_database&quot; &quot;app1_db&quot; {
   location            = &quot;East US&quot;
   server_name         = &quot;${azurerm_sql_server.standard_sql_server.name}&quot;
 }
-</code></pre><p>This concludes the exercise.</p>
+
+resource &quot;azurerm_sql_firewall_rule&quot; &quot;test&quot; {
+  name                = &quot;tf-az-app1-allow-azure-sqlfw&quot;
+  resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
+  server_name         = &quot;${azurerm_sql_server.standard_sql_server.name}&quot;
+  start_ip_address    = &quot;0.0.0.0&quot; # tells Azure to allow Azure services
+  end_ip_address      = &quot;0.0.0.0&quot; # tells Azure to allow Azure serivces
+}
+</code></pre><p>The first declaration creates an Azure SQL Server, the second creates a database, and the third enables other Azure services (like Web Apps) to talk to the SQL Server.</p>
+<p>This concludes the exercise.</p>
 <div class="exercise-end"></div>
 
 <p>The keen eye may have noticed we declared the Terraform resources in a specific order. Was that necesary? No. </p>
@@ -590,10 +601,7 @@ resource &quot;azurerm_sql_database&quot; &quot;app1_db&quot; {
 <p>Within Visual Studio Code, open a Terminal. Click &quot;Terminal &gt; New Terminal&quot;, then hit Enter.</p>
 <p>In the terminal, navigate to the C:\terraform folder, where you created the main.tf file. </p>
 <pre><code>cd c:\terraform 
-</code></pre><p>Login to Azure using the --identity flag, which uses the virtual machine&#39;s service account (which you created in chapter 1) to access Azure.</p>
-<pre><code class="lang-bash">az login --identity
-</code></pre>
-<p>Initialize Terraform:</p>
+</code></pre><p>Initialize Terraform:</p>
 <pre><code class="lang-bash">terraform init
 </code></pre>
 <blockquote>
