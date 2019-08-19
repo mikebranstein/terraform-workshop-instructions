@@ -1,4 +1,4 @@
-##Chapter 3: Create a Terraform Module
+## Create a Terraform Module
 
 folder structure (standard application, dev, prod)
 files (main, output, variables)
