@@ -61,8 +61,36 @@ Go ahead and click ont he Virtual machine, then pin it to the dashboard. When yo
 
 <img src="images/chapter1/vm-pin.gif" class="img-medium" />
 
+<div class="exercise-end"></div>
 
 That wraps up the basics of creating dashboard, creating resource groups, and pinning resources to a dashboard. We're not going to take a deep dive into Azure Resource Group. If you're interested in learning more, check out this [article](https://docs.microsoft.com/en-us/azure/azure-resource-manager/resource-group-portal).
+
+### Configuring your virtual machine's security permissions
+
+Before we can deploy our Terraform code, we need to do some housekeeping and give your virtual machine the permissions to access your Azure environment.
+
+<h4 class="exercise-start">
+    <b>Exercise</b>: Adding a Managed Service Identity to your Virtual Machine
+</h4>
+
+
+Navigating to your Azure portal dashboard and locate the VM resource group you pinned earlier in this chapter and click on your virtual machine:
+
+<img src="images/chapter1/click-vm.png" class="img-override" />
+
+Find the *Identity* blade on the left and set the *Status* to *On*. Press *Save*.
+
+<img src="images/chapter1/identity.png" class="img-override" />
+
+This creates a security account (or Azure service principal, "aka a service account") for your virtual machine. 
+
+Next, give the virtual machine *Contributor* rights to your Azure subscription. Follow this quick video to see how you can do that:
+
+<img src="images/chapter1/identity-2.gif" />
+
+This concludes the exercise.
+
+<div class="exercise-end"></div>
 
 
 ### Logging into your virtual machine
