@@ -435,8 +435,90 @@
 			</div>
 			<hr>
 			<div class="chapter">
-				<h2 id="example-chapter-2">Example Chapter 2</h2>
-<p>This is an update</p>
+				<p>##Chapter 2: Getting Started with Terraform</p>
+<p>In this section, we are going to deploy five services in Azure which will make up the base of our web application infrastructure: a Resource Group, an Application Service Plan, an Application Service, and a SQL Managed Instance Database (made up of a SQL Server resource and a SQL DB resource).</p>
+<p>First, let&#39;s open up Visual Studio Code and create a new file. We are going to name this file &quot;main.tf&quot;. This is one of the standard file names used in Terraform. We will talk about the others later in the workshop.</p>
+<p>The &quot;main.tf&quot; file is where we will delcare our instructions to Azure for what infrastructure we want to deploy and how we want to deploy the infrastructure.</p>
+<p>The first thing we need to do is tell Terraform to use the Azure RM Provider. The Provider tells Terraform what API it is interacting with for resource deployment. There are a number of officially supported Providers, as well as community-driven providers. The AzureRM Provider is one of the officially supported providers for Azure and the one we will be using throughout this workshop.</p>
+<p>Copy and paste the below section to the top of your main.tf file:</p>
+<pre><code>provider &quot;azurerm&quot; {
+    tenant_id       = &quot;&quot;
+    subscription_id = &quot;&quot;
+    use_msi = true
+}
+</code></pre><p>Make sure to place your Azure Tenant and Subscription ID inside the quotes next to the appropriate parameter.</p>
+<p>Now that we have established the Provider, we can begin declaring resources. Resources are always declared in the same way. We start with what resource we want to deploy, the alias name for the resource, and the parameters required to deploy the resource.</p>
+<p>Copy and paste the below section to create a new resource group:</p>
+<pre><code>#Resource Group
+resource &quot;azurerm_resource_group&quot; &quot;application_rg&quot; {
+    name     = &quot;tf-az-app1-dev-rg&quot;
+    location = &quot;East US&quot;
+}
+</code></pre><p>This resource only requires two parameters, which we have filled in here. There are additional parameters which are accepted by Terraform if we wanted to configure aspects like Tagging, etc. For this lab we will only be filling in required parameters. If you want to see the full list of parameters available for a resource, click on the highlighted resource name &quot;azurerm_resource_group&quot; in your VS Code main.tf file.</p>
+<p>Next, we are going to add the Application Service Plan by pasting the following code below the resource group resource:</p>
+<pre><code>resource &quot;azurerm_app_service_plan&quot; &quot;standard_app_plan&quot; {
+    name = &quot;tf-standard-plan&quot;
+    location = &quot;${azurerm_resource_group.application_rg.location}&quot;
+    resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
+    sku {
+        tier = &quot;Basic&quot;
+        size = &quot;B1&quot;
+    }
+}
+</code></pre><p>When parameters of a resource have multiple/sub-parameters, they are encapsulated with {}. In this case, the app service plan has a multi-property parameter for the sku tier and sku size.</p>
+<p>Also, notice the &quot;location&quot; and &quot;resource_group_name&quot; properties are using built-in syntax to obtain their values. We can pull outputs from other declared resources using the syntax &quot;azurerm_&lt;resource_type&gt;.&lt;resource_alias&gt;.&quot;. In this case the resource type is &quot;resource_group&quot;, the resource alias is &quot;application_rg&quot; (We provided the resource alias in the previous code snippet next to the declaration of the resource type), and the property we care about for location is &quot;.location&quot; and for resource_group_name it&#39;s &quot;.name&quot;.</p>
+<p>Now that we have declared the Plan our Application Service will use, we need to create the Azure Web App. Use the following code:</p>
+<pre><code>resource &quot;azurerm_app_service&quot; &quot;app1_app_service&quot; {
+    name = &quot;tf-az-app1-dev-app&quot;
+    location = &quot;East US&quot;
+    resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
+    app_service_plan_id = &quot;${azurerm_app_service_plan.app_plan.id}&quot;
+}
+</code></pre><p>The standard naming convention in Terraform is to keep everything lowercase and separate key words by dashes. In addition to Terraform&#39;s standards, we have established here a pattern for naming resources in Azure. This pattern is a common best practice for Azure and can vary for each organization based on naming needs. The pattern above is as follows: &quot;tf&quot; to declare the resource was created by Terraform, &quot;az&quot; to denote this is an Azure resource (this comes in handy when in a hybrid scenario), &quot;app1&quot; is the application name, &quot;dev&quot; is the environment, and &quot;app&quot; is the shorthand chosen for the resource type. </p>
+<p>In some cases, you cannot use dashes in names of Azure resources (ex. Storage Account) so an alternative is to keep everything lowercase and have no separation of key words with dashes if you want to keep names uniform across the board.</p>
+<p>Last, let&#39;s deploy a SQL Managed Instance DB. Use this code:</p>
+<pre><code>resource &quot;azurerm_sql_server&quot; &quot;standard_sql_server&quot; {
+  name                         = &quot;tf-az-standard-sql-dev&quot;
+  resource_group_name          = &quot;${azurerm_resource_group.application_rg.name}&quot;
+  location                     = &quot;East US&quot;
+  version                      = &quot;12.0&quot;
+  administrator_login          = &quot;sqladmin&quot;
+  administrator_login_password = &quot;CodePalousa2019!&quot;
+}
+
+resource &quot;azurerm_sql_database&quot; &quot;app1_db&quot; {
+  name                = &quot;tf-az-app1-dev-db&quot;
+  resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
+  location            = &quot;East US&quot;
+  server_name         = &quot;${azurerm_sql_server.standard_sql_server.name}&quot;
+}
+</code></pre><p>One last note about the configuration file we just created: while we are placing resources in a logical order, Terraform is a declarative language. This means we could have added these resource code snippets in ANY order in the file. Terraform will figure out the right way to order resources for proper deployment.</p>
+<p>Now that we have the &quot;main.tf&quot; file ready to go, let&#39;s deploy the resources.</p>
+<ol>
+<li>Click &quot;Terminal &gt; New Terminal&quot;, then hit Enter.</li>
+<li>We need to make sure we are in the same folder where we created the main.tf file. Run cd ./<folder path> to move into the folder&#39;s directory.</li>
+<li>Login to Azure by typing az login and supplying your credentials.</li>
+<li>Type terraform init and press enter. This tells Terraform to initialize the configuration files in this folder.</li>
+<li>Next, let&#39;s see what our terraform will create. Type terraform plan and press enter.</li>
+</ol>
+<p>If the code was written successfully, this should produce a list of all the resources terraform will create in Azure with values (or computed values) supplied. This is a way for us to check what we are deploying and make sure it is right before we actually deploy the resources to Azure.</p>
+<ol start="6">
+<li>Type terraform apply and press enter. When prompted, type &#39;yes&#39; to confirm you want to deploy the resources.</li>
+</ol>
+<p>The resources will deploy to your Azure subscription exactly as written. Open up the Azure Portal (<a href="https://portal.azure.com">https://portal.azure.com</a>) and look for the resource group you created. Find the app service you deployed and click into the resource. On the main overview page you can findthe default URL of the application service. Click on this link. </p>
+<p>You now have a base web application infrastructure where code can be deployed. Congrats! </p>
+<p>In the next module, we&#39;ll talk about how we can reformat this basic configuration file to be re-usable.</p>
+
+			</div>
+			<hr>
+			<div class="chapter">
+				<p>##Chapter 3: Create a Terraform Module</p>
+<p>folder structure (standard application, dev, prod)
+files (main, output, variables)
+refactor what we just deployed into a module-like process
+terraform destroy
+redeploy to dev
+deploy to prod</p>
 
 			</div>
 			<hr>
