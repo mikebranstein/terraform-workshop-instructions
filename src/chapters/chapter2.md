@@ -217,6 +217,10 @@ terraform init
 >
 > Behind the scenes, terraform init downloads any needed providers (like the AzureRM provider) when run, and ensures your code can run.
 
+You can see the effects of running terraform init from within VS Code: a `.terraform` folder is created, containing the AzureRM provider for your operating system:
+
+<img src="images/chapter2/init.png" class="img-small" />
+
 Next, let's see what our terraform will create. Run the Terraform plan command:
 
 ```bash
@@ -234,6 +238,8 @@ terraform apply
 ```
 
 The resources will deploy to your Azure subscription exactly as written. 
+
+<img src="images/chapter2/apply.png" class="img-override" />
 
 #### Checking your deployment
 

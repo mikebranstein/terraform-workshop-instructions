@@ -609,6 +609,8 @@ resource &quot;azurerm_sql_firewall_rule&quot; &quot;test&quot; {
 <p>The terraform init command is used to initialize a working directory containing Terraform configuration files. This is the first command that should be run after writing a new Terraform configuration or cloning an existing one from version control. It is safe to run this command multiple times.</p>
 <p>Behind the scenes, terraform init downloads any needed providers (like the AzureRM provider) when run, and ensures your code can run.</p>
 </blockquote>
+<p>You can see the effects of running terraform init from within VS Code: a <code>.terraform</code> folder is created, containing the AzureRM provider for your operating system:</p>
+<p><img src="images/chapter2/init.png" class="img-small" /></p>
 <p>Next, let&#39;s see what our terraform will create. Run the Terraform plan command:</p>
 <pre><code class="lang-bash">terraform plan
 </code></pre>
@@ -618,6 +620,7 @@ resource &quot;azurerm_sql_firewall_rule&quot; &quot;test&quot; {
 <pre><code class="lang-bash">terraform apply
 </code></pre>
 <p>The resources will deploy to your Azure subscription exactly as written. </p>
+<p><img src="images/chapter2/apply.png" class="img-override" /></p>
 <h4 id="checking-your-deployment">Checking your deployment</h4>
 <p>Open the Azure Portal (<a href="https://portal.azure.com">https://portal.azure.com</a>) and look for the resource group you created. Find the app service you deployed and click into the resource. On the main overview page you can findthe default URL of the application service. Click on this link. </p>
 <p>You now have a base web application infrastructure where code can be deployed. Congrats! </p>
