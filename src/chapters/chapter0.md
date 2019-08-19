@@ -95,7 +95,7 @@ DONE - Chapter 4: State management and adding a new module - MIKE
     - Setup TF Backend and explain chicken/egg scenario
     - Deploy, test, view statefile
 
-- Chapter 5: Add SQL and Deploy App - MIKE
+ALMOST DONE - Chapter 5: Add SQL and Deploy App - MIKE
     - Add in SQL Database
     - Use VS to deploy the app to App Service
     - deploy to dev/prod
