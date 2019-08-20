@@ -543,7 +543,7 @@ resource &quot;azurerm_resource_group&quot; &quot;application_rg&quot; {
 <p><strong>Whoa...dot-notation in Terraform?!</strong></p>
 <p>You may have noticed the ${} syntax with resource names and dot-notation in the above syntax. If you&#39;re familiar with programming languages, this won&#39;t surprise you. Terraform allows you to reference other declared resources by wrapping them in ${}, and using dot-notation to drill into properties of that resource. This comes in handy when you&#39;re chaining resources together, or when one resource depends on another resource. </p>
 </blockquote>
-<p>Looking back at the App Service Plan you jsut created, notice the &quot;location&quot; and &quot;resource_group_name&quot; properties. We used the dot-notation to obtain their values. We can pull other properties from other declared resources using the syntax &quot;azurerm_&lt;resource_type&gt;.&lt;resource_alias&gt;.&quot;. In this case the resource type is &quot;resource_group&quot;, the resource alias is &quot;application_rg&quot; (We provided the resource alias in the previous code snippet next to the declaration of the resource type), and the property we care about for location is &quot;.location&quot; and for resource_group_name it&#39;s &quot;.name&quot;.</p>
+<p>Looking back at the App Service Plan you just created, notice the &quot;location&quot; and &quot;resource_group_name&quot; properties. We used the dot-notation to obtain their values. We can pull other properties from other declared resources using the syntax &quot;azurerm_&lt;resource_type&gt;.&lt;resource_alias&gt;.&quot;. In this case the resource type is &quot;resource_group&quot;, the resource alias is &quot;application_rg&quot; (We provided the resource alias in the previous code snippet next to the declaration of the resource type), and the property we care about for location is &quot;.location&quot; and for resource_group_name it&#39;s &quot;.name&quot;.</p>
 <p>Now that we have declared the Plan our Application Service will use, let&#39;s create the Azure Web App. Use the following code and add it to your main.tf file:</p>
 <pre><code>resource &quot;azurerm_app_service&quot; &quot;app1_app_service&quot; {
     name = &quot;tf-az-app1-dev-app&quot;
@@ -632,13 +632,214 @@ resource &quot;azurerm_sql_firewall_rule&quot; &quot;test&quot; {
 			</div>
 			<hr>
 			<div class="chapter">
-				<h2 id="create-a-terraform-module">Create a Terraform Module</h2>
-<p>folder structure (standard application, dev, prod)
-files (main, output, variables)
-refactor what we just deployed into a module-like process
-terraform destroy
-redeploy to dev
-deploy to prod</p>
+				<h2 id="developing-reusable-code">Developing Reusable Code</h2>
+<p>In this chapter you&#39;ll learn:</p>
+<ul>
+<li>What a Terraform module is</li>
+<li>How to generalize Terraform code to make it reusable</li>
+<li>Use variables to pass data into modules</li>
+</ul>
+<h3 id="terraform-modules">Terraform Modules</h3>
+<p>In the last chapter, you wrote your first Terraform code, and learned three Terraform commands: init, plan, and apply. As your Terraform code becomes more complex, and you do more deployments, you may find the need to reuse Terraform code. You can do this with modules.</p>
+<blockquote>
+<p><strong>So what is a module in Terraform anyways?</strong> </p>
+<p>In the simplest terms, a module is a collection of declarative Terraform files, grouped together in a folder. That&#39;s right - Terraform sees any folder with Terraform files as a module. If you&#39;re familiar with other programming lanaguages, you can think of a module like an API - you pass data (variables) into it, infrastructure is provisioned, and data (output) is returned. </p>
+</blockquote>
+<p>You&#39;ll recall from the last chapter, that Terraform collects all &quot;.tf&quot; files in a folder (or rather, a module) when it runs. The files are combined into a single master code declaration, dependencies discovered, and infrastructure is provisioned in the order determined.</p>
+<h4 id="structuring-modules">Structuring modules</h4>
+<p>Modules consist of three files, generally:</p>
+<ol>
+<li>A <code>main.tf</code> file where all primary code exists. </li>
+<li>A <code>variables.tf</code> or <code>vars.tf</code> file where variables for that module are declared. </li>
+<li>An <code>output.tf</code> file where any module outputs are declared. </li>
+</ol>
+<p>You&#39;ve already seen what goes into a main.tf file so let&#39;s talk about the other two.</p>
+<p>The variables file, is made up of all pre-defined variables (or module inputs) for a file. Here is an example of how to construct a variable:</p>
+<pre><code>variable &quot;location&quot; {
+    description = &quot;Location where Resources will be deployed&quot;
+    default = &quot;East US&quot;
+}
+</code></pre><p>The example above declares a <em>location</em> variable, which can include a description and a default value, though these are not required. If no default value is supplied, the module will expect these to be supplied by some other means, either through direct user input or by outputs.</p>
+<p>Speaking of outputs, let&#39;s look at an example of what might go into an <code>output.tf</code> file:</p>
+<pre><code>output &quot;app_service_fqdn&quot; {
+    value = &quot;${azurerm_app_service.app1_app_service.default_site_hostname}&quot;
+}
+</code></pre><p>The example above declares an &quot;app_service_fqdn&quot; output and specifies the value comes from the result of the app service default site hostname. This means we can use computed values from our deployment elsewhere. Like for example, in another module.</p>
+<p>The ability for setting up inputs and outputs using declarative language gives us the flexibility needed to generalize configurations so they can be <em>stamped-out</em> on demand. </p>
+<h3 id="creating-a-generalized-module">Creating a Generalized Module</h3>
+<p>Now that you know what goes into a module, let&#39;s build one together.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Generalizing modules
+</h4>
+
+<p>The first thing we need to do here is create a new folder in your <code>C:\terraform</code> folder. We are going to call this folder <code>_modules</code>. </p>
+<p>Next, create a sub-folder in <code>_modules</code> called <code>standard_application</code>. </p>
+<p>Now move the <code>main.tf</code> file we created in the previous chapter into this folder. In VS Code, drag the file from it&#39;s current parent location to the <code>standard_application</code> sub-folder you just created.</p>
+<p>Next, create two more files in the <code>standard_application</code> folder. Create an empty <code>variables.tf</code> file and an empty <code>output.tf</code> file. We&#39;ll populate these later as we get a better feel for what variables we need.</p>
+<p>This creates the baseline of our module, but we aren&#39;t done. </p>
+<p>We are going to create two more folders at the root of <code>C:\terraform</code>. First create a folder called <code>dev</code>, then a folder called <code>prod</code>. We&#39;ll work with these folders more toward the end of this section.</p>
+<h4 id="generalizing-the-module">Generalizing the Module</h4>
+<p>Technically the <code>main.tf</code> file we created earlier is part of a module now called <em>standard_application</em> but we cannot re-use it yet. There are certain parameters we have hard-coded which will prevent us from dynamically calling the module. Let&#39;s change that by replacing those hard-coded values with variables.</p>
+<blockquote>
+<p><strong>Before we go further</strong></p>
+<p>Please remove the provider block at the top of the <code>main.tf</code> file we created earlier. Save the provider code -- we&#39;ll need it later. We&#39;ll talk about why you have to do this later. </p>
+</blockquote>
+<p>Open up the &quot;variables.tf&quot; file and paste the following code:</p>
+<pre><code>variable &quot;location&quot; {
+    description = &quot;Location where Resources will be deployed&quot;
+}
+
+variable &quot;application_plan_tier&quot; {
+    description = &quot;Tier of the Application Plan (Free, Shared, Basic, Standard, Premium, Isolated)&quot;
+}
+
+variable &quot;application_plan_size&quot; {
+    description = &quot;Instance Size of the Application Plan (F1, D1, B1, B2, B3, S1, S2, S3, P1v2, P2v2, P3v2, PC2, PC3, PC4, I1, I2, I3)&quot;
+}
+
+variable &quot;application_name&quot; {
+    description = &quot;Name of the Application&quot;
+}
+
+variable &quot;sql_administrator_login&quot; {
+    description = &quot;Login for the Managed SQL Instance&quot;
+}
+
+variable &quot;sql_administrator_password&quot; {
+    description = &quot;Password for the Managed SQL Instance&quot;
+}
+
+variable &quot;environment&quot; {
+    description = &quot;Environment of all deployed resources&quot;
+}
+</code></pre><blockquote>
+<p><strong>A word on variables</strong></p>
+<p>These seven variables will give us what we need to generalize the module. There could be more variables if we desired, or less if we still wanted to hard code certain elements (like the plan tier and size) to the module. This comes down to what you are trying to achieve with the module. For instance, if you want all your standard apps to share the same plan tier you can exclude it from the variables file and just declare the desired value directly in the &quot;main.tf&quot; file.</p>
+<p>We like to think of modules like an API. The variables represent input values that allow the module to be flexible and provision different infrastructure configurations - they form the API&#39;s surface and interface. The module&#39;s <code>main.tf</code> code then represents the implementation of the API. </p>
+</blockquote>
+<p>With our freshly declared variables, let&#39;s open up the <em>standard_application</em> <code>main.tf</code> file and begin generalizing the resources we previously created.</p>
+<p>Replace the existing Resource Group block with the following code:</p>
+<pre><code># Resource Group
+resource &quot;azurerm_resource_group&quot; &quot;application_rg&quot; {
+    name     = &quot;tf-az-${var.application_name}-${var.environment}-rg&quot;
+    location = &quot;${var.location}&quot;
+}
+</code></pre><p>Variables are called by supplying ${var.<variable name>}. You&#39;ll also notice that you can place variables side-by-side in Terraform code (like we did with the <em>name</em> key/value pair above.</p>
+<p>Next, let&#39;s generalize the App Service Plan and App Service:</p>
+<pre><code># App Service Plan
+resource &quot;azurerm_app_service_plan&quot; &quot;standard_app_plan&quot; {
+    name                = &quot;tf-az-standard-${var.environment}-plan&quot;
+    location            = &quot;${var.location}&quot;
+    resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
+    sku {
+        tier = &quot;${var.application_plan_tier}&quot;
+        size = &quot;${var.application_plan_size}&quot;
+    }
+}
+
+# App Service
+resource &quot;azurerm_app_service&quot; &quot;app1_app_service&quot; {
+    name                = &quot;tf-az-${var.application_name}-${var.environment}-app&quot;
+    location            = &quot;${var.location}&quot;
+    resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
+    app_service_plan_id = &quot;${azurerm_app_service_plan.app_plan.id}&quot;
+}
+</code></pre><p>Last, finish generalizing the <em>standard_application</em> module. Use the following code to replace the SQL Server code. </p>
+<pre><code># Azure SQL DB
+resource &quot;azurerm_sql_server&quot; &quot;standard_sql_server&quot; {
+  name                         = &quot;tf-az-standard-sql-${var.environment}&quot;
+  resource_group_name          = &quot;${azurerm_resource_group.application_rg.name}&quot;
+  location                     = &quot;${var.location}&quot;
+  version                      = &quot;12.0&quot;
+  administrator_login          = &quot;${var.sql_administrator_login}&quot;
+  administrator_login_password = &quot;${var.sql_administrator_password}&quot;
+}
+
+resource &quot;azurerm_sql_database&quot; &quot;app1_db&quot; {
+  name                = &quot;tf-az-${var.application_name}-${var.environment}-db&quot;
+  resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
+  location            = &quot;${var.location}&quot;
+  server_name         = &quot;${azurerm_sql_server.standard_sql_server.name}&quot;
+}
+
+resource &quot;azurerm_sql_firewall_rule&quot; &quot;test&quot; {
+  name                = &quot;tf-az-${var.application_name}-${var.environment}-allow-azure-sqlfw&quot;
+  resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
+  server_name         = &quot;${azurerm_sql_server.standard_sql_server.name}&quot;
+  start_ip_address    = &quot;0.0.0.0&quot; # tells Azure to allow Azure services
+  end_ip_address      = &quot;0.0.0.0&quot; # tells Azure to allow Azure serivces
+}
+</code></pre><p>Notice we left the start_ip_address and end_ip_address as hard-coded values. We want to keep these inputs static so we did not generalize them. This will also not affect the dynamic creation of said rule, as it should be the same every time it gets created by Terraform.</p>
+<p>This concludes the exercise.</p>
+<div class="exercise-end"></div>
+
+
+<h3 id="calling-modules">Calling Modules</h3>
+<p>In the last section, you learned how to take existing Terraform code and turn it into a generalized module. Now that we have this module, let&#39;s use it!</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Calling a module
+</h4>
+
+<p>In the last section, you created a <code>dev</code> and <code>prod</code> folder within <code>C:\terraform</code>. In this exercise, you&#39;ll be creating Terraform code in each folder and referencing the <em>standard_application</em> module.</p>
+<p>Let&#39;s get started. </p>
+<p>In the &quot;dev&quot; folder, create a new <code>main.tf</code> file. </p>
+<blockquote>
+<p><strong>Don&#39;t forget the provider!</strong></p>
+<p>Remember when we got rid of the provider declaration in the <code>standard_application\main.tf</code> file earlier in this chapter? We are going to declare the provider in this file <code>dev\main.tf</code>. If a provider is not declared in a module, the module will use the provider of the configuration file that called the module. </p>
+<p>It is generally best to keep provider declarations at the root folder where modules will be called. Only declare a provider in a module when you need to override the default provider used (like when you need to use a specific provider version for compatibility).</p>
+</blockquote>
+<p>Open the <code>dev\main.tf</code> file you just created and paste the following code (or the provider code you saved earlier):</p>
+<pre><code>provider &quot;azurerm&quot; {
+    tenant_id       = &quot;&quot;
+    subscription_id = &quot;&quot;
+    use_msi = true
+}
+</code></pre><p>Just like before, make sure to place your Azure Tenant and Subscription ID inside the quotes next to the appropriate parameter.</p>
+<p>Next we are going to call the previously created &quot;standard_application&quot; module and supply the required values. </p>
+<blockquote>
+<p><strong>Module inception?</strong></p>
+<p>If you recall, modules are simply a folder with Terraform code within. So technically, the new <code>main.tf</code> file you created <em>is</em> a module...and we&#39;ll be adding code to call the <em>standard_application</em> module. In other words, modules can call other modules. </p>
+<p>We&#39;re going to call the &quot;standard_application&quot; module to generate both a dev environment and a prod environment (hence the <code>dev</code> and <code>prod</code> folders). In large deployments, this saves us time. It also reduces the chance of errors because we know the same infrastructure will be deployed -- using the standards that we have set in the module (for naming convention, etc.).</p>
+</blockquote>
+<p>Paste the following code below the provider block:</p>
+<pre><code>module &quot;standard_application&quot; {
+    source                     = &quot;../_modules/standard_application/&quot;
+
+    environment                = &quot;dev&quot;
+    application_name           = &quot;app1&quot;
+    location                   = &quot;East US&quot;
+    application_plan_tier      = &quot;Basic&quot;
+    application_plan           = &quot;B1&quot;
+    sql_administrator_login    = &quot;sqladmin&quot;
+    sql_administrator_password = &quot;CodePalousa2019!&quot;
+}
+</code></pre><p>To call a module, declare it with a module {} block. The name of the module can be anything you want. In our case the name is &quot;standard_application&quot;. The source parameter specifies where the module is located in the file system, relative to the current file. The rest of the parameters are the variables we created earlier. Remember, any variable without a default value must be supplied by the user when calling the module directly.</p>
+<p>It&#39;s good to know that modules don&#39;t have to be located on your local file system - they can be located in an external location. Tht&#39;s a more advanced topic, and we&#39;re not going to cover it in today&#39;s workshop. Feel free to investigate further if you&#39;re interested.</p>
+<h4 id="testing-your-changes">Testing your changes</h4>
+<p>Before we go any further, we need to destroy the resources we created earlier. We could use a built-in command from Terraform, <code>terraform destroy</code> (which destroys anything created by Terraform), or we can manually delete the resources from the Azure Portal by deleting the resource group we deployed previously.</p>
+<p>It&#39;s probably easiest to navigate to the Azure portal and delete the resource group. Do that now. Come back here once you&#39;re finished. </p>
+<p>Now that your Azure environment is cleaned up, let&#39;s deploy the resources like we did before.</p>
+<p>First make sure we are in the c:\terraform\dev folder in our terminal. If not, cd to the appropriate folder level:</p>
+<pre><code class="lang-bash">cd c:\terraform
+</code></pre>
+<p>Run <code>terraform init</code> to initialize our configuration - you have to do this again because the new root <code>main.tf</code> file is located in a new sub-folder, <code>dev</code>.</p>
+<pre><code class="lang-bash">terraform init
+</code></pre>
+<p>Next, run the <code>terraform plan</code> command. This isn&#39;t a required step for deployment but it is a good practice to follow in order to reduce potential errors.</p>
+<pre><code class="lang-bash">terraform plan
+</code></pre>
+<p>If the output of the plan checks out, let&#39;s apply:</p>
+<pre><code class="lang-bash">terraform apply
+</code></pre>
+<p>The resources will deploy to your Azure subscription exactly as written. </p>
+<h4 id="checking-your-deployment">Checking your deployment</h4>
+<p>Open the Azure Portal and look for the resource group you created. This should look similar to what we deployed manually. Only now, we can deploy this as many times as we want with different values and it will return unique &quot;standard_application&quot; infrastructure deployments, each with their own unique resource group.</p>
+<h4 id="extra-credit">Extra credit</h4>
+<p>Just kidding. There&#39;s no extra credit, but if you want, copy the <code>dev\main.tf</code> file into the <code>prod</code> folder, change a couple of the parameter values we supplied, and deploy terraform from the prod folder to see a &quot;production&quot; environment next to your &quot;development&quot; environment. Note: This is not required for the other modules.</p>
+<p>This concludes the exercise.</p>
+<div class="exercise-end"></div>
+
+<p>Well done! Another chapter down and you&#39;ve learned how to make re-usable modules in Terraform. </p>
 
 			</div>
 			<hr>
