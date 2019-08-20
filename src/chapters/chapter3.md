@@ -1,6 +1,6 @@
 ## Create a Terraform Module
 
-In this section we are going to focus on creating a re-usable Module in Terraform. 
+In this chapter we are going to focus on creating a re-usable module in Terraform. 
 
 >**So what is a module in Terraform anyways?** 
 >
@@ -80,11 +80,21 @@ variable "environment" {
     description = "Environment of all deployed resources"
 }
 ```
->**A word on variables**
+>**More on variables**
 >
 >These seven variables will give us what we need to generalize the module. There could be more variables if we desired, or less if we still wanted to hard code certain elements (like the plan tier and size) to the module. This comes down to what you are trying to achieve with the module. For instance, if you want all your standard apps to share the same plan tier you can exclude it from the variables file and just declare the desired value directly in the "main.tf" file.
 
-With our freshly declared variables, let's open up the "main.tf" file and begin generalizing the resources we previously created.
+With our freshly declared variables, let's open up the "output.tf" file and paste the following:
+
+```
+output "app_service_fqdn" {
+    value = "${azurerm_app_service.app1_app_service.default_site_hostname}"
+}
+```
+
+We will be using this output in a future chapter, and will discuss this in more detail at that time.
+
+Let's move on to the "main.tf" file and begin generalizing the resources we previously created.
 
 Replace the existing Resource Group block with the following code:
 
@@ -217,8 +227,7 @@ If the output of the plan checks out, let's apply:
 ```bash
 terraform apply
 ```
-
-The resources will deploy to your Azure subscription exactly as written. 
+Type 'yes' to confirm the deployment. The resources will deploy to your Azure subscription exactly as written. 
 
 #### Checking your deployment
 
