@@ -1,6 +1,6 @@
 ## Getting Started with Terraform
 
-In this chapter, you'll deploy five services in Azure which will make up the base of your web application infrastructure: a Resource Group, an App Service Plan, an App Service, and a SQL Managed Instance Database (made up of a SQL Server resource and a SQL DB resource).
+In this chapter, you'll deploy five services in Azure which will make up the base of your web application infrastructure: a Resource Group, an App Service Plan, and an App Service. In later chapters, you'll add to this by provisioning a SQL Azure Database (made up of an Azure SQL resource and an Azure SQL Database resource).
 
 ### Terraform Providers
 
