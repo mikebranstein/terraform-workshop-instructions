@@ -1,6 +1,6 @@
 ## Getting Started with Terraform
 
-In this chapter, you'll deploy five services in Azure which will make up the base of your web application infrastructure: a Resource Group, an App Service Plan, an App Service, and a SQL Managed Instance Database (made up of a SQL Server resource and a SQL DB resource).
+In this chapter, you'll deploy five services in Azure which will make up the base of your web application infrastructure: a Resource Group, an App Service Plan, and an App Service. In later chapters, you'll add to this by provisioning a SQL Azure Database (made up of an Azure SQL resource and an Azure SQL Database resource).
 
 ### Terraform Providers
 
@@ -147,39 +147,8 @@ resource "azurerm_app_service" "app1_app_service" {
 >
 > Some resources must also have globally unique names (like Storage Accounts...again), so you may need adjust names accordingly.
 
-#### Adding a SQL Server
-
-Last, let's deploy a SQL Managed Instance DB. Use this code:
-
-```
-resource "azurerm_sql_server" "standard_sql_server" {
-  name                         = "tf-az-standard-sql-dev"
-  resource_group_name          = "${azurerm_resource_group.application_rg.name}"
-  location                     = "East US"
-  version                      = "12.0"
-  administrator_login          = "sqladmin"
-  administrator_login_password = "CodePalousa2019!"
-}
-
-resource "azurerm_sql_database" "app1_db" {
-  name                = "tf-az-app1-dev-db"
-  resource_group_name = "${azurerm_resource_group.application_rg.name}"
-  location            = "East US"
-  server_name         = "${azurerm_sql_server.standard_sql_server.name}"
-}
-
-resource "azurerm_sql_firewall_rule" "test" {
-  name                = "tf-az-app1-allow-azure-sqlfw"
-  resource_group_name = "${azurerm_resource_group.application_rg.name}"
-  server_name         = "${azurerm_sql_server.standard_sql_server.name}"
-  start_ip_address    = "0.0.0.0" # tells Azure to allow Azure services
-  end_ip_address      = "0.0.0.0" # tells Azure to allow Azure serivces
-}
-```
-
-The first declaration creates an Azure SQL Server, the second creates a database, and the third enables other Azure services (like Web Apps) to talk to the SQL Server.
-
 This concludes the exercise.
+
 
 <div class="exercise-end"></div>
 
