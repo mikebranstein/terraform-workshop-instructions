@@ -6,7 +6,7 @@ resource "azurerm_resource_group" "application_rg" {
 
 #Application Service Plan
 resource "azurerm_app_service_plan" "standard_app_plan" {
-    name = "tf-az-standard-plan"
+    name = "tf-az-standard-${var.environment}-plan"
     location = "${var.location}"
     resource_group_name = "${azurerm_resource_group.application_rg.name}"
     sku {
@@ -38,4 +38,12 @@ resource "azurerm_sql_database" "app1_db" {
   resource_group_name = "${azurerm_resource_group.application_rg.name}"
   location            = "${var.location}"
   server_name         = "${azurerm_sql_server.standard_sql_server.name}"
+}
+
+resource "azurerm_sql_firewall_rule" "test" {
+  name                = "tf-az-${var.application_name}-${var.environment}-allow-azure-sqlfw"
+  resource_group_name = "${azurerm_resource_group.application_rg.name}"
+  server_name         = "${azurerm_sql_server.standard_sql_server.name}"
+  start_ip_address    = "0.0.0.0" # tells Azure to allow Azure services
+  end_ip_address      = "0.0.0.0" # tells Azure to allow Azure serivces
 }
