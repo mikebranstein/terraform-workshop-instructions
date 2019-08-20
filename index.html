@@ -607,11 +607,28 @@ resource &quot;azurerm_resource_group&quot; &quot;application_rg&quot; {
 			<hr>
 			<div class="chapter">
 				<h2 id="developing-reusable-code">Developing Reusable Code</h2>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</p>
+<h1 id="in-this-chapter-we-are-going-to-focus-on-creating-a-re-usable-module-in-terraform-">In this chapter we are going to focus on creating a re-usable module in Terraform. </h1>
 <p>In this chapter you&#39;ll learn:</p>
 <ul>
 <li>What a Terraform module is</li>
 <li>How to generalize Terraform code to make it reusable</li>
-<li>Use variables to pass data into modules</li>
+<li>Use variables to pass data into modules<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>4f512a475df4a09491acae3a519dd66e548c3d06</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</li>
 </ul>
 <h3 id="terraform-modules">Terraform Modules</h3>
 <p>In the last chapter, you wrote your first Terraform code, and learned three Terraform commands: init, plan, and apply. As your Terraform code becomes more complex, and you do more deployments, you may find the need to reuse Terraform code. You can do this with modules.</p>
@@ -678,12 +695,51 @@ variable &quot;application_name&quot; {
 variable &quot;environment&quot; {
     description = &quot;Environment of all deployed resources&quot;
 }
-</code></pre><blockquote>
+</code></pre><p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</p>
+<blockquote>
+<h1 id="more-on-variables"><strong>More on variables</strong></h1>
+</blockquote>
+<blockquote>
 <p><strong>A word on variables</strong></p>
 <p>These seven variables will give us what we need to generalize the module. There could be more variables if we desired, or less if we still wanted to hard code certain elements (like the plan tier and size) to the module. This comes down to what you are trying to achieve with the module. For instance, if you want all your standard apps to share the same plan tier you can exclude it from the variables file and just declare the desired value directly in the &quot;main.tf&quot; file.</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>4f512a475df4a09491acae3a519dd66e548c3d06</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
 <p>We like to think of modules like an API. The variables represent input values that allow the module to be flexible and provision different infrastructure configurations - they form the API&#39;s surface and interface. The module&#39;s <code>main.tf</code> code then represents the implementation of the API. </p>
 </blockquote>
+<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
+With our freshly declared variables, let&#39;s open up the &quot;output.tf&quot; file and paste the following:</p>
+<pre><code>output &quot;app_service_fqdn&quot; {
+    value = &quot;${azurerm_app_service.app1_app_service.default_site_hostname}&quot;
+}
+</code></pre><p>We will be using this output in a future chapter, and will discuss this in more detail at that time.</p>
+<h1 id="let-s-move-on-to-the-main-tf-file-and-begin-generalizing-the-resources-we-previously-created-">Let&#39;s move on to the &quot;main.tf&quot; file and begin generalizing the resources we previously created.</h1>
 <p>With our freshly declared variables, let&#39;s open up the <em>standard_application</em> <code>main.tf</code> file and begin generalizing the resources we previously created.</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>4f512a475df4a09491acae3a519dd66e548c3d06</p>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
+</blockquote>
 <p>Replace the existing Resource Group block with the following code:</p>
 <pre><code># Resource Group
 resource &quot;azurerm_resource_group&quot; &quot;application_rg&quot; {
@@ -769,7 +825,7 @@ resource &quot;azurerm_app_service&quot; &quot;app1_app_service&quot; {
 <p>If the output of the plan checks out, let&#39;s apply:</p>
 <pre><code class="lang-bash">terraform apply
 </code></pre>
-<p>The resources will deploy to your Azure subscription exactly as written. </p>
+<p>Type &#39;yes&#39; to confirm the deployment. The resources will deploy to your Azure subscription exactly as written. </p>
 <h4 id="checking-your-deployment">Checking your deployment</h4>
 <p>Open the Azure Portal and look for the resource group you created. This should look similar to what we deployed manually. Only now, we can deploy this as many times as we want with different values and it will return unique &quot;standard_application&quot; infrastructure deployments, each with their own unique resource group.</p>
 <h4 id="extra-credit">Extra credit</h4>
@@ -1096,6 +1152,290 @@ variable &quot;sql_administrator_password&quot; {
 <p>Just in case you forgot, make sure you deploy the web app to prod before continuing.</p>
 </blockquote>
 <p>Bravo! You&#39;ve deployed a web app t the infrastructure you created via Terraform. This concludes the chapter, but the story isn&#39;t finished. In the next chapter, you&#39;ll learn how to secure your web apps by using an Azure App Gateway and Web Application Firewall (provisioned with Terraform, of course).</p>
+
+			</div>
+			<hr>
+			<div class="chapter">
+				<h2 id="securing-your-web-app-with-a-waf-app-gateway">Securing your Web App with a WAF/App Gateway</h2>
+<p>In this chapter, we will be extending our existing web app infrastructure to include a layer of networking and security. We will be adding two new modules that integrate into what has been deployed already. This includes an Azure App Gateway resource.</p>
+<blockquote>
+<p><strong>What is a WAF/App Gateway?</strong></p>
+<p>An Azure App Gateway is a managed Layer 7 Firewall service provided by Microsoft. This solution is sometimes referred to as a WAF or Web Application Firewall, and in fact, has a WAF mode which includes additional features such as protection against SQL Injections. The App Gateway is a powerful tool which gives us URL routing capabilities, and enterprise level network security and can integrate with other Azure services, including Azure Web Apps.</p>
+</blockquote>
+<h3 id="create-supporting-modules">Create Supporting Modules</h3>
+<p>In addition to the App Gateway, we have some other network resources which will be deployed. This includes an Azure Virtual Network, Subnets, and a Public IP which will be used for the App Gateway. </p>
+<blockquote>
+<p><strong>Virtual Networks, Subnets, Public IPs</strong></p>
+<p>The Virtual Network is a unique address space which contains one or more subnets and can be used for internal, isolated routing. Some PaaS services in Azure can be integrated with Virtual Networks, including App Services. Subnets are a way to carve up the address space and further isolate resources on the private network. Public IPs are resources in Azure which can be attached to services like the Application Gateway to provide a single entrypoint for web applications.</p>
+</blockquote>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Creating Core Services
+</h4>
+
+<p>Let&#39;s get on with creating our modules! </p>
+<p>The first module we are going to create is for the Virtual Network and Subnets. This module will be called &quot;core_services&quot; and will be separated into it&#39;s own Resource Group.</p>
+<blockquote>
+<p><strong>Why a new Resource Group?</strong></p>
+<p>We like to create networking resources in their own resource group to better control who has read/write access to them. Often times, we find customers have dedicated networking teams that manage networking resources.</p>
+</blockquote>
+<p>Start by creating a folder in <code>c:\terraform\_modules</code> called <code>core_services</code>. Next, create the three standard Terraform files: </p>
+<ul>
+<li>main.tf</li>
+<li>variables.tf</li>
+<li>output.tf</li>
+</ul>
+<p>Open the <code>core_services\variables.tf</code> file and paste the following code:</p>
+<pre><code>variable &quot;functional_name&quot; {
+    description = &quot;The primary purpose of the resources (ex. &#39;shared-services&#39;)&quot;
+}
+
+variable &quot;location&quot; {
+    description = &quot;Location where Resources will be deployed&quot;
+}
+
+variable &quot;virtual_network_address_space&quot; {
+    description = &quot;The Address Space of the Virtual Network&quot;
+}
+
+variable &quot;management_subnet&quot; {
+    description = &quot;The Management Subnet (x.x.x.x/x)&quot;
+}
+
+variable &quot;gateway_subnet&quot; {
+    description = &quot;The Gateway Subnet (x.x.x.x/x)&quot;
+}
+
+variable &quot;application_name&quot; {
+    description = &quot;The Name of the Application&quot;
+}
+
+variable &quot;environment&quot; {
+    description = &quot;Environment of all deployed resources&quot;
+}
+</code></pre><p>Nothing too new here, this just establishes the variables we plan to use for the module. Notice the <em>management_subnet</em> and <em>gateway_subnet</em> variables. This will allow users to pass in a CIDR address space (ex. 10.10.0.0/16) to define a subnet. There are ways to dynamically generate subnets using built-in Terraform functions, but we won&#39;t be diving into that in this workshop. Ask us about it if you&#39;re interested.</p>
+<p>Next, let&#39;s populate our main.tf file with resources. Copy and paste the following code into your <code>core_services\main.tf</code> file:</p>
+<pre><code># Resource Group
+resource &quot;azurerm_resource_group&quot; &quot;network_rg&quot; {
+    name     = &quot;tf-az-${var.functional_name}-${var.environment}-rg&quot;
+    location = &quot;${var.location}&quot;
+}
+
+# Virtual Network
+resource &quot;azurerm_virtual_network&quot; &quot;core_vnet&quot; {
+    name                = &quot;tf-az-${var.functional_name}-${var.environment}-vnet&quot;
+    location            = &quot;${var.location}&quot;
+    resource_group_name = &quot;${azurerm_resource_group.network_rg.name}&quot;
+    address_space       = [&quot;${var.virtual_network_address_space}&quot;]
+}
+
+# Subnets
+resource &quot;azurerm_subnet&quot; &quot;management_subnet&quot; {
+    name                 = &quot;tf-az-${var.functional_name}-mgmt-subnet&quot;
+    address_prefix       = &quot;${var.management_subnet}&quot;
+    virtual_network_name = &quot;${azurerm_virtual_network.core_vnet.name}&quot;
+    resource_group_name  = &quot;${azurerm_resource_group.network_rg.name}&quot;
+}
+
+resource &quot;azurerm_subnet&quot; &quot;gateway_subnet&quot; {
+    name                 = &quot;tf-az-${var.functional_name}-gw-subnet&quot;
+    address_prefix       = &quot;${var.gateway_subnet}&quot;
+    virtual_network_name = &quot;${azurerm_virtual_network.core_vnet.name}&quot;
+    resource_group_name  = &quot;${azurerm_resource_group.network_rg.name}&quot;
+}
+</code></pre><p>We have created a new Resource Group, a Virtual Network, and two Subnets. Take note of the <em>address_space</em> parameter in the virtual network resource. The [] are required because the <em>address_space</em> parameter expects a list. Lists are declared with [] in Terraform. This means we could pass in more than one comma-separated address space if we wanted.</p>
+<blockquote>
+<p><strong>Why two subnets?</strong></p>
+<p>When deploying network resources, we like to provision a management subnet and a subnet for the resource.  The management subnet is a standard subnet generally used for operations resources, like a VM to test configuration. The gateway subnet will be used for the App Gateway. This is purely a preference, but we&#39;ve found it helps ease management in emergencies, or during troubleshooting.</p>
+</blockquote>
+<p>We are almost done with this module. We need to add an output. Open the &quot;core_services\output.tf&quot; file and paste the following code:</p>
+<pre><code>output &quot;gateway_subnet_id&quot; {
+   value = &quot;${azurerm_subnet.gateway_subnet.id}&quot;
+}
+</code></pre><p>This output will be used to pass the gateway subnet id from this module to the next module we will create. We are doing this because the next module includes our Application Gateway, and one of the required parameters is the subnet id for gateway configuration.</p>
+<h4 id="the-shared-services">The Shared Services</h4>
+<p>The next module we will create is the shared services module. This is where our App Gateway resides, and is theoretically the place where all services which are shared between multiple applications should reside. Or rather, services which have a shared level of management between teams. Arguably we could have App Service Plans and SQL Server resources here since they could be shared between multiple applications but we prefer to keep these co-located with the applications they support, as they will generally be managed by the same teams.</p>
+<p>Create a folder under <code>_modules</code> called <code>shared_services</code> and create the three Terraform files:</p>
+<ul>
+<li>main.tf</li>
+<li>variables.tf</li>
+<li>output.tf</li>
+</ul>
+<p>Open the <code>shared_services\variables.tf</code> file and paste the following code:</p>
+<pre><code>variable &quot;functional_name&quot; {
+    description = &quot;The primary purpose of the resources (ex. &#39;shared-services&#39;)&quot;
+}
+
+variable &quot;location&quot; {
+    description = &quot;Location where Resources will be deployed&quot;
+}
+
+variable &quot;gateway_subnet_id&quot; {
+    description = &quot;The Gateway Subnet (x.x.x.x/x)&quot;
+}
+
+variable &quot;application_name&quot; {
+    description = &quot;The Name of the Application&quot;
+}
+
+variable &quot;environment&quot; {
+    description = &quot;Environment of all deployed resources&quot;
+}
+
+variable &quot;app_service_fqdn&quot; {
+    description = &quot;The FQDN of the Application Service&quot;
+}
+</code></pre><p>The <em>gateway_subnet_id</em> and the <em>app_service_fqdn</em> variables from above will be populated with the outputs from the <em>core_services</em> and <em>standard_application</em> modules. Way back in chapter three we created an output in our <em>standard_application</em> module called <em>app_service_fqdn</em> which retrieves the App Service FQDN for use with our Application Gateway. Likewise, the <em>gateway_subnet_id</em> will be passed from the output we created earlier in this chapter for use in the App Gateway resource. We&#39;ll talk more about how we pass in those outputs later.</p>
+<p>Let&#39;s populate our <code>shared_services\main.tf</code> file with all the resources we need:</p>
+<pre><code># Resource Group
+resource &quot;azurerm_resource_group&quot; &quot;shared_rg&quot; {
+    name     = &quot;tf-az-${var.functional_name}-${var.environment}-rg&quot;
+    location = &quot;${var.location}&quot;
+}
+
+# Public IP Address
+resource &quot;azurerm_public_ip&quot; &quot;gateway_pip&quot; {
+    name                = &quot;tf-az-${var.functional_name}-${var.environment}-pip&quot;
+    resource_group_name = &quot;${azurerm_resource_group.shared_rg.name}&quot;
+    location            = &quot;${var.location}&quot;
+    sku                 = &quot;Standard&quot;
+    allocation_method   = &quot;Static&quot;
+}
+
+#Application Gateway
+resource &quot;azurerm_application_gateway&quot; &quot;gateway&quot; {
+    name     = &quot;tf-az-${var.functional_name}-${var.environment}-ag&quot;
+    location = &quot;${var.location}&quot;
+    resource_group_name = &quot;${azurerm_resource_group.shared_rg}&quot;
+
+    sku {
+        name     = &quot;Standard_Medium&quot;
+        tier     = &quot;WAF_v2&quot;
+        capacity = 1
+    }
+
+    gateway_ip_configuration {
+        name      = &quot;tf-az-${var.functional_name}-ip-configuration&quot;
+        subnet_id = &quot;${var.gateway_subnet_id}&quot;
+    }
+
+    frontend_port {
+        name = &quot;tf-az-${var.functional_name}-fep-80&quot;
+        port = 80
+    }
+
+    frontend_ip_configuration {
+        name                 = &quot;tf-az-${var.functional_name}-feip&quot;
+        public_ip_address_id = &quot;${azurerm_public_ip.test.id}&quot;
+    }
+
+    backend_address_pool {
+        name = &quot;tf-az-${var.application_name}-beap&quot;
+        fqdns = [&quot;${var.app_service_fqdn}&quot;]
+    }
+
+    backend_http_settings {
+        name                  = &quot;tf-az-${var.application_name}-http-80&quot;
+        cookie_based_affinity = &quot;Disabled&quot;
+        path                  = &quot;/&quot;
+        port                  = 80
+        protocol              = &quot;Http&quot;
+        request_timeout       = 20
+    }
+
+    http_listener {
+        name                           = &quot;tf-az-${var.application_name}-listener&quot;
+        frontend_ip_configuration_name = &quot;tf-az-${var.application_name}-feip&quot;
+        frontend_port_name             = &quot;tf-az-${var.application_name}-fep-80&quot;
+        protocol                       = &quot;Http&quot;
+    }
+
+    request_routing_rule {
+        name                        = &quot;tf-az-${var.application_name}-rule&quot;
+        rule_type                   = &quot;Basic&quot;
+        http_listener_name          = &quot;tf-az-${var.application_name}-listener&quot;
+        backend_address_pool_name   = &quot;tf-az-${var.application_name}-beap&quot;
+        backend_http_settings_name  = &quot;tf-az-${var.application_name}-http-80&quot;
+    }
+}
+</code></pre><p>As you can see from the above code, the App Gateway is a fairly complicated resource. The first four sub-property blocks create the core components of the Application Gateway: <em>sku</em>, <em>gateway_ip_configuration</em>, <em>frontend_port</em>, <em>frontend_ip_configuration</em>. </p>
+<p>The next four sub-property blocks are tied to specific application pools (in our case, the single web application): <em>backend_address_pool</em>, <em>backend_http_settings</em>, <em>http_listener</em>, <em>request_routing_rule</em>. </p>
+<p>If we had multiple application back-ends (or apps) this App Gateway talked to, we would need to include those four sub-property blocks AGAIN for that application. This means the App Gateway resource can grow in a configuration file and is the primary reason we have split this resource out into its own module.</p>
+<p>Notice the <em>gateway_ip_configuration</em> includes our <em>gateway_subnet_id</em> variable which will be populated with our output from the <em>core_services</em> module. The <em>backend_address_pool</em> includes our <em>app_service_fqdn</em> variable which will be populated with our output from the <em>standard_application</em> module.</p>
+<p>We are not going to add any outputs in the <em>shared_services</em> module but we want the file to exist so that if we later decide we need information from this module we can update the module to include those outputs.</p>
+<p>This concludes the exercise.</p>
+<div class="exercise-end"></div>
+
+<h3 id="putting-it-all-together">Putting it all together</h3>
+<p>Now that we have created our modules, we need to tie them together in a single deployment. We will do this from the <code>dev\main.tf</code> file we created in a previous chapter.</p>
+<h4 class="exercise-start">
+    <b>Exercise</b>: Updating our root main.tf code
+</h4>
+
+<p>Open the <code>c:\terraform\dev\main.tf</code> file.</p>
+<p>Below the backend <em>azurerm</em> {} code block paste the following code:</p>
+<pre><code>module &quot;core_services&quot; {
+    source                        = &quot;../_modules/core_services/&quot;
+
+    environment                   = &quot;dev&quot;
+    functional_name               = &quot;core-services&quot;
+    location                      = &quot;East US&quot;
+    virtual_network_address_space = &quot;10.10.0.0/16&quot;
+    management_subnet             = &quot;10.10.1.0/24&quot; 
+    gateway_subnet                = &quot;10.10.2.0/24&quot;
+    application_name              = &quot;app1&quot;
+
+}
+</code></pre><p>This will create our core services. The Virtual Network will be created with a /16 address space and be carved up into two /24 subnets.</p>
+<p>Next, we will add the following code after the module <em>standard_application</em> {} block:</p>
+<pre><code>module &quot;shared_services&quot; {
+    source            = &quot;../_modules/shared_services/&quot;
+
+    environment       = &quot;dev&quot;
+    functional_name   = &quot;shared-services&quot;
+    location          = &quot;East US&quot;
+    application_name  = &quot;app1&quot;
+    gateway_subnet_id = &quot;${module.core_services.gateway_subnet_id}&quot;
+    app_service_fqdn  = &quot;${module.standard_application.app_service_fqdn}&quot;
+}  
+</code></pre><blockquote>
+<p><strong>A reminder on Ordering</strong></p>
+<p>If you don&#39;t put these in the right order... that&#39;s okay! This is a declarative language. However, for ease of reading and logical ordering we are placing things in a specific order.</p>
+</blockquote>
+<p>Notice the <em>gateway_subnet_id</em> and the <em>app_service_fqdn</em> variables are retrieving values from the other modules. Terraform will wait for those modules to complete before attempting to start deployment of the shared_services module. Module outputs can be retrieved using ${module.<module name>.<output name>}. If no output is defined, the values cannot be retrieved directly from the module.</p>
+<h4 id="deploying-to-dev-and-prod">Deploying to Dev and Prod</h4>
+<p>With all the modules declared, we can now fully deploy our development environment. This time, we do not have to delete the previously created resources. This is because we have a state file from our previous module which will tell Terraform that one of the modules has already been deployed. Terraform will read the state file, verify the configurations match, then move on to deploying the new modules.</p>
+<p>In our Terminal window, navigate to <code>c:\terraform\dev</code>, then paste the following command:</p>
+<pre><code class="lang-bash">terraform plan
+</code></pre>
+<p>Once we have confirmed everything will deploy as expected, go ahead and run the apply:</p>
+<pre><code class="lang-bash">terraform apply
+</code></pre>
+<p>Type &#39;yes&#39; to confirm the deployment. The resources will deploy to your Azure subscription exactly as written.</p>
+<p>Next, let&#39;s copy our <code>dev\main.tf</code> file over to the prod folder. Once in the prod folder, go ahead and change the environment parameters values to <em>prod</em> (make sure to change this for each module called).</p>
+<p>We can leave everything else the same. The ip addresses of the virtual network for production will overlap BUT the virtual networks are not connected with each other. So this will not cause any issues. In a real world scenario, the ip address spaces would likely be different even though they still probably wouldn&#39;t be connected to each other for the sake of resource isolation.</p>
+<p>Now that you have the <code>prod\main.tf</code> file updated, open the terminal and cd to <code>c:\terraform\prod</code>, then paste the following command:</p>
+<pre><code class="lang-bash">terraform plan
+</code></pre>
+<p>Once we have confirmed everything will deploy as expected, go ahead and run the apply:</p>
+<pre><code class="lang-bash">terraform apply
+</code></pre>
+<p>When complete, you will now have two sets of environments deployed in your Azure Subscription, one for Development and one for Production.</p>
+<p>This concludes the exercise. </p>
+<div class="exercise-end"></div>
+
+
+<h3 id="wrap-up">Wrap up</h3>
+<p>Let&#39;s test our application...visit the Azure portal and verify that everything still works.</p>
+<p>Congrats! You now have a functioning, secure web application using infrastructure as code with Terraform!</p>
+<h3 id="future-direction">Future Direction</h3>
+<p>Now that you&#39;ve reached the end of the workshop, where can yo go next? You could:</p>
+<ol>
+<li>try integrating your Terraform code into a CICD pipeline</li>
+<li>explore other providers</li>
+<li>try to declaratively describe an existing cloud environment </li>
+<li>something else?</li>
+</ol>
+<p>Congrats! You&#39;re finished!</p>
 
 			</div>
 			<hr>
