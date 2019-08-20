@@ -94,14 +94,6 @@ variable "application_name" {
     description = "Name of the Application"
 }
 
-variable "sql_administrator_login" {
-    description = "Login for the Managed SQL Instance"
-}
-
-variable "sql_administrator_password" {
-    description = "Password for the Managed SQL Instance"
-}
-
 variable "environment" {
     description = "Environment of all deployed resources"
 }
@@ -149,37 +141,6 @@ resource "azurerm_app_service" "app1_app_service" {
     app_service_plan_id = "${azurerm_app_service_plan.app_plan.id}"
 }
 ```
-
-Last, finish generalizing the *standard_application* module. Use the following code to replace the SQL Server code. 
-
-```
-# Azure SQL DB
-resource "azurerm_sql_server" "standard_sql_server" {
-  name                         = "tf-az-standard-sql-${var.environment}"
-  resource_group_name          = "${azurerm_resource_group.application_rg.name}"
-  location                     = "${var.location}"
-  version                      = "12.0"
-  administrator_login          = "${var.sql_administrator_login}"
-  administrator_login_password = "${var.sql_administrator_password}"
-}
-
-resource "azurerm_sql_database" "app1_db" {
-  name                = "tf-az-${var.application_name}-${var.environment}-db"
-  resource_group_name = "${azurerm_resource_group.application_rg.name}"
-  location            = "${var.location}"
-  server_name         = "${azurerm_sql_server.standard_sql_server.name}"
-}
-
-resource "azurerm_sql_firewall_rule" "test" {
-  name                = "tf-az-${var.application_name}-${var.environment}-allow-azure-sqlfw"
-  resource_group_name = "${azurerm_resource_group.application_rg.name}"
-  server_name         = "${azurerm_sql_server.standard_sql_server.name}"
-  start_ip_address    = "0.0.0.0" # tells Azure to allow Azure services
-  end_ip_address      = "0.0.0.0" # tells Azure to allow Azure serivces
-}
-```
-
-Notice we left the start_ip_address and end_ip_address as hard-coded values. We want to keep these inputs static so we did not generalize them. This will also not affect the dynamic creation of said rule, as it should be the same every time it gets created by Terraform.
 
 This concludes the exercise.
 
@@ -237,8 +198,6 @@ module "standard_application" {
     location                   = "East US"
     application_plan_tier      = "Basic"
     application_plan           = "B1"
-    sql_administrator_login    = "sqladmin"
-    sql_administrator_password = "CodePalousa2019!"
 }
 ```
 

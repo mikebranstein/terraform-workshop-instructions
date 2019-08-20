@@ -560,32 +560,6 @@ resource &quot;azurerm_resource_group&quot; &quot;application_rg&quot; {
 <p>In some cases, you cannot use dashes in names of Azure resources (ex. Storage Account) so an alternative is to keep everything lowercase and have no separation of key words with dashes if you want to keep names uniform across the board.</p>
 <p>Some resources must also have globally unique names (like Storage Accounts...again), so you may need adjust names accordingly.</p>
 </blockquote>
-<h4 id="adding-a-sql-server">Adding a SQL Server</h4>
-<p>Last, let&#39;s deploy a SQL Managed Instance DB. Use this code:</p>
-<pre><code>resource &quot;azurerm_sql_server&quot; &quot;standard_sql_server&quot; {
-  name                         = &quot;tf-az-standard-sql-dev&quot;
-  resource_group_name          = &quot;${azurerm_resource_group.application_rg.name}&quot;
-  location                     = &quot;East US&quot;
-  version                      = &quot;12.0&quot;
-  administrator_login          = &quot;sqladmin&quot;
-  administrator_login_password = &quot;CodePalousa2019!&quot;
-}
-
-resource &quot;azurerm_sql_database&quot; &quot;app1_db&quot; {
-  name                = &quot;tf-az-app1-dev-db&quot;
-  resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
-  location            = &quot;East US&quot;
-  server_name         = &quot;${azurerm_sql_server.standard_sql_server.name}&quot;
-}
-
-resource &quot;azurerm_sql_firewall_rule&quot; &quot;test&quot; {
-  name                = &quot;tf-az-app1-allow-azure-sqlfw&quot;
-  resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
-  server_name         = &quot;${azurerm_sql_server.standard_sql_server.name}&quot;
-  start_ip_address    = &quot;0.0.0.0&quot; # tells Azure to allow Azure services
-  end_ip_address      = &quot;0.0.0.0&quot; # tells Azure to allow Azure serivces
-}
-</code></pre><p>The first declaration creates an Azure SQL Server, the second creates a database, and the third enables other Azure services (like Web Apps) to talk to the SQL Server.</p>
 <p>This concludes the exercise.</p>
 <div class="exercise-end"></div>
 
@@ -701,14 +675,6 @@ variable &quot;application_name&quot; {
     description = &quot;Name of the Application&quot;
 }
 
-variable &quot;sql_administrator_login&quot; {
-    description = &quot;Login for the Managed SQL Instance&quot;
-}
-
-variable &quot;sql_administrator_password&quot; {
-    description = &quot;Password for the Managed SQL Instance&quot;
-}
-
 variable &quot;environment&quot; {
     description = &quot;Environment of all deployed resources&quot;
 }
@@ -744,33 +710,7 @@ resource &quot;azurerm_app_service&quot; &quot;app1_app_service&quot; {
     resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
     app_service_plan_id = &quot;${azurerm_app_service_plan.app_plan.id}&quot;
 }
-</code></pre><p>Last, finish generalizing the <em>standard_application</em> module. Use the following code to replace the SQL Server code. </p>
-<pre><code># Azure SQL DB
-resource &quot;azurerm_sql_server&quot; &quot;standard_sql_server&quot; {
-  name                         = &quot;tf-az-standard-sql-${var.environment}&quot;
-  resource_group_name          = &quot;${azurerm_resource_group.application_rg.name}&quot;
-  location                     = &quot;${var.location}&quot;
-  version                      = &quot;12.0&quot;
-  administrator_login          = &quot;${var.sql_administrator_login}&quot;
-  administrator_login_password = &quot;${var.sql_administrator_password}&quot;
-}
-
-resource &quot;azurerm_sql_database&quot; &quot;app1_db&quot; {
-  name                = &quot;tf-az-${var.application_name}-${var.environment}-db&quot;
-  resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
-  location            = &quot;${var.location}&quot;
-  server_name         = &quot;${azurerm_sql_server.standard_sql_server.name}&quot;
-}
-
-resource &quot;azurerm_sql_firewall_rule&quot; &quot;test&quot; {
-  name                = &quot;tf-az-${var.application_name}-${var.environment}-allow-azure-sqlfw&quot;
-  resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
-  server_name         = &quot;${azurerm_sql_server.standard_sql_server.name}&quot;
-  start_ip_address    = &quot;0.0.0.0&quot; # tells Azure to allow Azure services
-  end_ip_address      = &quot;0.0.0.0&quot; # tells Azure to allow Azure serivces
-}
-</code></pre><p>Notice we left the start_ip_address and end_ip_address as hard-coded values. We want to keep these inputs static so we did not generalize them. This will also not affect the dynamic creation of said rule, as it should be the same every time it gets created by Terraform.</p>
-<p>This concludes the exercise.</p>
+</code></pre><p>This concludes the exercise.</p>
 <div class="exercise-end"></div>
 
 
@@ -810,8 +750,6 @@ resource &quot;azurerm_sql_firewall_rule&quot; &quot;test&quot; {
     location                   = &quot;East US&quot;
     application_plan_tier      = &quot;Basic&quot;
     application_plan           = &quot;B1&quot;
-    sql_administrator_login    = &quot;sqladmin&quot;
-    sql_administrator_password = &quot;CodePalousa2019!&quot;
 }
 </code></pre><p>To call a module, declare it with a module {} block. The name of the module can be anything you want. In our case the name is &quot;standard_application&quot;. The source parameter specifies where the module is located in the file system, relative to the current file. The rest of the parameters are the variables we created earlier. Remember, any variable without a default value must be supplied by the user when calling the module directly.</p>
 <p>It&#39;s good to know that modules don&#39;t have to be located on your local file system - they can be located in an external location. Tht&#39;s a more advanced topic, and we&#39;re not going to cover it in today&#39;s workshop. Feel free to investigate further if you&#39;re interested.</p>
@@ -1025,20 +963,29 @@ resource &quot;azurerm_sql_firewall_rule&quot; &quot;test&quot; {
 }
 
 resource &quot;azurerm_sql_database&quot; &quot;app1_db&quot; {
-  name                = &quot;tf-az-${var.application_name}--${var.environment}-db&quot;
+  name                = &quot;tf-az-${var.application_name}-${var.environment}-db&quot;
   resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
   location            = &quot;${var.location}&quot;
   server_name         = &quot;${azurerm_sql_server.standard_sql_server.name}&quot;
 }
-</code></pre><p>The first declaration creates an Azure SQL Server named <code>tf-az-standard-sql-{env}</code>. The second adds a database named <code>tf-az-${var.application_name}--${var.environment}-db</code> to the SQL Server.</p>
+
+resource &quot;azurerm_sql_firewall_rule&quot; &quot;test&quot; {
+  name                = &quot;tf-az-${var.application_name}-${var.environment}-allow-azure-sqlfw&quot;
+  resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
+  server_name         = &quot;${azurerm_sql_server.standard_sql_server.name}&quot;
+  start_ip_address    = &quot;0.0.0.0&quot; # tells Azure to allow Azure services
+  end_ip_address      = &quot;0.0.0.0&quot; # tells Azure to allow Azure serivces
+}
+</code></pre><p>The first declaration creates an Azure SQL Server named <code>tf-az-standard-sql-{env}</code>. The second adds a database named <code>tf-az-${var.application_name}--${var.environment}-db</code> to the SQL Server. The third enables other Azure services to communicate with the SQL Server. </p>
+<p>Notice we left the start_ip_address and end_ip_address as hard-coded values. We want to keep these inputs static so we did not generalize them. This will also not affect the dynamic creation of said rule, as it should be the same every time it gets created by Terraform.</p>
 <h4 id="update-the-module-variables">Update the module variables</h4>
-<p>You may have noticed we&#39;re using several new variables. Let&#39;s add them to the end of the variables.tf file:</p>
+<p>You may have noticed we&#39;re using several new variables. Let&#39;s add them to the end of the <code>variables.tf</code> file:</p>
 <pre><code>variable &quot;sql_administrator_login&quot; {
-    description = &quot;Login for the Managed SQL Instance&quot;
+    description = &quot;Login for the Azure SQL Instance&quot;
 }
 
 variable &quot;sql_administrator_password&quot; {
-    description = &quot;Password for the Managed SQL Instance&quot;
+    description = &quot;Password for the Azure SQL Instance&quot;
 }
 </code></pre><h4 id="supply-the-module-with-variable-values">Supply the module with variable values</h4>
 <p>After adding the variables, update the supplied values of the variables in your main.tf files (dev and prod) with the supplied values.</p>

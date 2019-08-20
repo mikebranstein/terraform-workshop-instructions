@@ -33,26 +33,36 @@ resource "azurerm_sql_server" "standard_sql_server" {
 }
 
 resource "azurerm_sql_database" "app1_db" {
-  name                = "tf-az-${var.application_name}--${var.environment}-db"
+  name                = "tf-az-${var.application_name}-${var.environment}-db"
   resource_group_name = "${azurerm_resource_group.application_rg.name}"
   location            = "${var.location}"
   server_name         = "${azurerm_sql_server.standard_sql_server.name}"
 }
+
+resource "azurerm_sql_firewall_rule" "test" {
+  name                = "tf-az-${var.application_name}-${var.environment}-allow-azure-sqlfw"
+  resource_group_name = "${azurerm_resource_group.application_rg.name}"
+  server_name         = "${azurerm_sql_server.standard_sql_server.name}"
+  start_ip_address    = "0.0.0.0" # tells Azure to allow Azure services
+  end_ip_address      = "0.0.0.0" # tells Azure to allow Azure serivces
+}
 ```
 
-The first declaration creates an Azure SQL Server named `tf-az-standard-sql-{env}`. The second adds a database named `tf-az-${var.application_name}--${var.environment}-db` to the SQL Server.
+The first declaration creates an Azure SQL Server named `tf-az-standard-sql-{env}`. The second adds a database named `tf-az-${var.application_name}--${var.environment}-db` to the SQL Server. The third enables other Azure services to communicate with the SQL Server. 
+
+Notice we left the start_ip_address and end_ip_address as hard-coded values. We want to keep these inputs static so we did not generalize them. This will also not affect the dynamic creation of said rule, as it should be the same every time it gets created by Terraform.
 
 #### Update the module variables
 
-You may have noticed we're using several new variables. Let's add them to the end of the variables.tf file:
+You may have noticed we're using several new variables. Let's add them to the end of the `variables.tf` file:
 
 ```
 variable "sql_administrator_login" {
-    description = "Login for the Managed SQL Instance"
+    description = "Login for the Azure SQL Instance"
 }
 
 variable "sql_administrator_password" {
-    description = "Password for the Managed SQL Instance"
+    description = "Password for the Azure SQL Instance"
 }
 ```
 

@@ -147,39 +147,8 @@ resource "azurerm_app_service" "app1_app_service" {
 >
 > Some resources must also have globally unique names (like Storage Accounts...again), so you may need adjust names accordingly.
 
-#### Adding a SQL Server
-
-Last, let's deploy a SQL Managed Instance DB. Use this code:
-
-```
-resource "azurerm_sql_server" "standard_sql_server" {
-  name                         = "tf-az-standard-sql-dev"
-  resource_group_name          = "${azurerm_resource_group.application_rg.name}"
-  location                     = "East US"
-  version                      = "12.0"
-  administrator_login          = "sqladmin"
-  administrator_login_password = "CodePalousa2019!"
-}
-
-resource "azurerm_sql_database" "app1_db" {
-  name                = "tf-az-app1-dev-db"
-  resource_group_name = "${azurerm_resource_group.application_rg.name}"
-  location            = "East US"
-  server_name         = "${azurerm_sql_server.standard_sql_server.name}"
-}
-
-resource "azurerm_sql_firewall_rule" "test" {
-  name                = "tf-az-app1-allow-azure-sqlfw"
-  resource_group_name = "${azurerm_resource_group.application_rg.name}"
-  server_name         = "${azurerm_sql_server.standard_sql_server.name}"
-  start_ip_address    = "0.0.0.0" # tells Azure to allow Azure services
-  end_ip_address      = "0.0.0.0" # tells Azure to allow Azure serivces
-}
-```
-
-The first declaration creates an Azure SQL Server, the second creates a database, and the third enables other Azure services (like Web Apps) to talk to the SQL Server.
-
 This concludes the exercise.
+
 
 <div class="exercise-end"></div>
 
