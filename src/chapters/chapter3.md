@@ -45,6 +45,10 @@ This creates the baseline of our module, but we aren't done. We are going to cre
 
 Technically the "main.tf" file we created earlier is part of a module now called "standard_application" but we cannot re-use this module yet. There are certain parameters we have hard-coded which will prevent us from dynamically calling the module. Let's change that by replacing those hard-coded values with variables.
 
+>**Before we go further**
+>
+>Please remove the provider block at the top of the "main.tf" file we created earlier. We will talk about why later.
+
 Open up the "variables.tf" file and paste the following code:
 
 ```
@@ -154,13 +158,70 @@ resource "azurerm_sql_firewall_rule" "test" {
 
 Notice we left the start_ip_address and end_ip_address as hard-coded values. We want to keep these inputs static so we did not generalize them. This will also not affect the dynamic creation of said rule, as it should be the same every time it gets created by Terraform.
 
+The module is now usable. So let's use it!
 
+###Calling Modules
 
+We are going to call our generalized module from the "dev" folder. Before we can do that, we need a configuration file. In the "dev" folder, create a new "main.tf" file. 
 
+>**Where do Providers go?**
+>
+>Remember when we got rid of the provider declaration in the standard_application\main.tf file earlier in this exercise? We are going to declare the provider in this file (dev\main.tf). If a provider is not declared in a module, the module will use the provider of the configuration file that called the module. It is generally best to keep provider declarations at the root folder where modules will be called.
 
+Open the "dev\main.tf" file you just created and paste the following code:
 
+```
+provider "azurerm" {
+    tenant_id       = ""
+    subscription_id = ""
+    use_msi = true
+}
+```
 
-refactor what we just deployed into a module-like process
-terraform destroy
-redeploy to dev
-deploy to prod
+Just like before, make sure to place your Azure Tenant and Subscription ID inside the quotes next to the appropriate parameter.
+
+Next we are going to call the previously created "standard_application" module and supply the required values. Paste the following code below the provider block:
+
+```
+module "standard_application" {
+    source                     = "../_modules/standard_application/"
+
+    environment                = "dev"
+    application_name           = "app1"
+    location                   = "East US"
+    application_plan_tier      = "Basic"
+    application_plan           = "B1"
+    sql_administrator_login    = "sqladmin"
+    sql_administrator_password = "CodePalousa2019!"
+}
+```
+
+Modules are declared with a module {} block. The name of the module can be anything you want. In our case the name is "standard_application". The source parameter specifies where the module is located in the repository. This can also be an external source, but in our case it is a local one. The rest of the parameters are the variables we created earlier. Remember, any variable without a default value must be supplied by the user when calling the module directly.
+
+>**Clean up**
+>
+>Before we go any further, we need to destroy the resources we created earlier. We could use "terraform destroy" to destroy anything created by terraform, or we can manually delete the resources from the Azure Portal by deleting the resource group we deployed previously.
+
+Now that we have the file ready to go, and we have deleted the original resource group we created with terraform, we need to deploy the resources like we did before.
+
+First make sure we are in the c:\terraform\dev folder in our terminal. If not, cd to the appropriate folder level. 
+
+Next, run the terraform plan command. This isn't a required step for deployment but it is a good practice to follow in order to reduce potential errors.
+
+```bash
+terraform plan
+```
+
+If the output of the plan checks out, let's apply:
+
+```bash
+terraform apply
+```
+
+The resources will deploy to your Azure subscription exactly as written. 
+
+#### Checking your deployment
+
+Open the Azure Portal (https://portal.azure.com) and look for the resource group you created. This should look similar to what we deployed manually. Only now, we can deploy this as many times as we want with different values and it will return unique "standard_application" infrastructure deployments, each with their own unique resource group.
+
+If you want, you can copy the dev\main.tf file over to the prod folder, change a couple of the parameter values we supplied, and deploy terraform from the prod folder to see a "production" environment next to your "development" environment. Note: This is not required for the other modules.
