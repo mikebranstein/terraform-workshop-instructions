@@ -551,7 +551,13 @@ resource &quot;azurerm_resource_group&quot; &quot;application_rg&quot; {
     <b>Exercise</b>: Generalizing modules
 </h4>
 
-<p>The first thing we need to do here is create a new folder in your <code>C:\terraform</code> folder. We are going to call this folder <code>_modules</code>. </p>
+<p>Before we begin, clean up your <code>c:\terraform</code> fodler by removing the following files/folders:</p>
+<ul>
+<li>.terraform folder (use VS Code to delete it)</li>
+<li>terraform.tfstate file</li>
+<li>terraform.tfstate.backup file</li>
+</ul>
+<p>Create a new folder in your <code>C:\terraform</code> folder. We are going to call this folder <code>_modules</code>. </p>
 <p>Next, create a sub-folder in <code>_modules</code> called <code>standard_application</code>. </p>
 <p>Now move the <code>main.tf</code> file we created in the previous chapter into this folder. In VS Code, drag the file from it&#39;s current parent location to the <code>standard_application</code> sub-folder you just created.</p>
 <p>Next, create two more files in the <code>standard_application</code> folder. Create an empty <code>variables.tf</code> file and an empty <code>output.tf</code> file. We&#39;ll populate these later as we get a better feel for what variables we need.</p>
@@ -592,14 +598,14 @@ variable &quot;environment&quot; {
     value = &quot;${azurerm_app_service.app1_app_service.default_site_hostname}&quot;
 }
 </code></pre><p>We will be using this output in a future chapter, and will discuss this in more detail at that time.</p>
-<p>Let&#39;s move on to the &quot;main.tf&quot; file and begin generalizing the resources we previously created.</p>
+<p>Let&#39;s move on to the <code>main.tf</code> file and begin generalizing the resources we previously created.</p>
 <p>Replace the existing Resource Group block with the following code:</p>
 <pre><code># Resource Group
 resource &quot;azurerm_resource_group&quot; &quot;application_rg&quot; {
     name     = &quot;tf-az-${var.application_name}-${var.environment}-rg&quot;
     location = &quot;${var.location}&quot;
 }
-</code></pre><p>Variables are called by supplying ${var.<variable name>}. You&#39;ll also notice that you can place variables side-by-side in Terraform code (like we did with the <em>name</em> key/value pair above.</p>
+</code></pre><p>Variables are called by supplying ${var.<variable name>}. You&#39;ll also notice that you can place variables side-by-side in Terraform code (like we did with the <em>name</em> key/value pair above).</p>
 <p>Next, let&#39;s generalize the App Service Plan and App Service:</p>
 <pre><code># App Service Plan
 resource &quot;azurerm_app_service_plan&quot; &quot;standard_app_plan&quot; {
@@ -617,7 +623,7 @@ resource &quot;azurerm_app_service&quot; &quot;app1_app_service&quot; {
     name                = &quot;tf-az-${var.application_name}-${var.environment}-app&quot;
     location            = &quot;${var.location}&quot;
     resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
-    app_service_plan_id = &quot;${azurerm_app_service_plan.app_plan.id}&quot;
+    app_service_plan_id = &quot;${azurerm_app_service_plan.standard_app_plan.id}&quot;
 }
 </code></pre><p>This concludes the exercise.</p>
 <div class="exercise-end"></div>
@@ -658,7 +664,7 @@ resource &quot;azurerm_app_service&quot; &quot;app1_app_service&quot; {
     application_name           = &quot;app1&quot;
     location                   = &quot;East US&quot;
     application_plan_tier      = &quot;Basic&quot;
-    application_plan           = &quot;B1&quot;
+    application_plan_size      = &quot;B1&quot;
 }
 </code></pre><p>To call a module, declare it with a module {} block. The name of the module can be anything you want. In our case the name is &quot;standard_application&quot;. The source parameter specifies where the module is located in the file system, relative to the current file. The rest of the parameters are the variables we created earlier. Remember, any variable without a default value must be supplied by the user when calling the module directly.</p>
 <p>It&#39;s good to know that modules don&#39;t have to be located on your local file system - they can be located in an external location. Tht&#39;s a more advanced topic, and we&#39;re not going to cover it in today&#39;s workshop. Feel free to investigate further if you&#39;re interested.</p>

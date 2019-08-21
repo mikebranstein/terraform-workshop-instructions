@@ -55,7 +55,12 @@ Now that you know what goes into a module, let's build one together.
     <b>Exercise</b>: Generalizing modules
 </h4>
 
-The first thing we need to do here is create a new folder in your `C:\terraform` folder. We are going to call this folder `_modules`. 
+Before we begin, clean up your `c:\terraform` fodler by removing the following files/folders:
+- .terraform folder (use VS Code to delete it)
+- terraform.tfstate file
+- terraform.tfstate.backup file
+
+Create a new folder in your `C:\terraform` folder. We are going to call this folder `_modules`. 
 
 Next, create a sub-folder in `_modules` called `standard_application`. 
 
@@ -112,7 +117,7 @@ output "app_service_fqdn" {
 
 We will be using this output in a future chapter, and will discuss this in more detail at that time.
 
-Let's move on to the "main.tf" file and begin generalizing the resources we previously created.
+Let's move on to the `main.tf` file and begin generalizing the resources we previously created.
 
 Replace the existing Resource Group block with the following code:
 
@@ -124,7 +129,7 @@ resource "azurerm_resource_group" "application_rg" {
 }
 ```
 
-Variables are called by supplying ${var.<variable name>}. You'll also notice that you can place variables side-by-side in Terraform code (like we did with the *name* key/value pair above.
+Variables are called by supplying ${var.<variable name>}. You'll also notice that you can place variables side-by-side in Terraform code (like we did with the *name* key/value pair above).
 
 Next, let's generalize the App Service Plan and App Service:
 
@@ -145,7 +150,7 @@ resource "azurerm_app_service" "app1_app_service" {
     name                = "tf-az-${var.application_name}-${var.environment}-app"
     location            = "${var.location}"
     resource_group_name = "${azurerm_resource_group.application_rg.name}"
-    app_service_plan_id = "${azurerm_app_service_plan.app_plan.id}"
+    app_service_plan_id = "${azurerm_app_service_plan.standard_app_plan.id}"
 }
 ```
 
@@ -204,7 +209,7 @@ module "standard_application" {
     application_name           = "app1"
     location                   = "East US"
     application_plan_tier      = "Basic"
-    application_plan           = "B1"
+    application_plan_size      = "B1"
 }
 ```
 
