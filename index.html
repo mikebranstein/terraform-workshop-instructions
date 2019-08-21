@@ -51,111 +51,16 @@
 <h4 id="create-reproducible-infrastrcuture">Create reproducible infrastrcuture</h4>
 <p>Terraform lets teams easily use the same configurations in multiple places to reduce mistakes and save time. You can use the same configuration files to deploy multiple identical environments. Common Terraform configurations (like SQL/IIS or LEAN/MEAN stack apps) can be packaged as modules and used across teams and organizations.</p>
 <h3 id="about-the-workshop">About the Workshop</h3>
-<p>#TODO: remove next section when finished</p>
-<p>Add more verbiage here.</p>
-<ul>
-<li>VM image (Mike) - DONE<ul>
-<li>Windows 10</li>
-<li>Visual Studio 2019</li>
-<li>.NET Core 2.2</li>
-<li>VS Code</li>
-<li>Terraform (in path)</li>
-<li>Chrome pre-installed</li>
-</ul>
-</li>
-<li>Update the ARM Template to use stored VM image - DONE</li>
-<li>Update ARM Template to include<ul>
-<li>Storage Account</li>
-</ul>
-</li>
-<li><p>Deployed VM &amp; Storage Account from ARM Template</p>
-</li>
-<li><p>TF (Eric)</p>
-<ul>
-<li>Modular TF using Storage account as backend</li>
-<li>Module for App Service and SQL</li>
-<li>Module for Shared Services - WAF/App Gateway</li>
-<li>parameterization in modules<ul>
-<li>RG</li>
-<li>Environment</li>
-</ul>
-</li>
-<li>High-level Main.tf for dev and prod</li>
-</ul>
-</li>
-</ul>
-<p>Web App (Mike)</p>
-<pre><code>- Fabrikam
-- .NET Solution
-</code></pre><p>Potential agenda:</p>
-<ul>
-<li>Brief Intro/Presentation/About Terraform - MIKE</li>
-</ul>
-<p>DONE - Chapter 0: Create an Azure Subscription if you need one - MIKE</p>
-<ul>
-<li><p>Chapter 1: Getting started quick - MIKE</p>
-<ul>
-<li>Setup VM</li>
-<li>Subscription ID &amp; Tenant ID</li>
-<li>Create RG view in portal</li>
-</ul>
-</li>
-<li><p>Chapter 2: - ERIC</p>
-<ul>
-<li>Use new TF code to add:<ul>
-<li>RG</li>
-<li>App Service Plan</li>
-<li>App Service</li>
-</ul>
-</li>
-<li>A side callout/discussion on naming standards<ul>
-<li>lowercase, dashes, etc.</li>
-</ul>
-</li>
-<li>Deploy this (w/o modules to Azure)</li>
-<li>Test that website works (default IIS page)</li>
-</ul>
-</li>
-<li><p>Chatper 3: Modules - ERIC</p>
-<ul>
-<li>Refactor what we just deployed into a module-like process</li>
-<li>Blow away existing RG</li>
-<li>Re-deploy to dev</li>
-<li>Deploy to production</li>
-</ul>
-</li>
-</ul>
-<p>DONE - Chapter 4: State management and adding a new module - MIKE</p>
-<pre><code>- Discuss State Management, why it&#39;s important
-- Setup TF Backend and explain chicken/egg scenario
-- Deploy, test, view statefile
-</code></pre><p>ALMOST DONE - Chapter 5: Add SQL and Deploy App - MIKE</p>
-<pre><code>- Add in SQL Database
-- Use VS to deploy the app to App Service
-- deploy to dev/prod
-- test
-</code></pre><ul>
-<li><p>Chapter 6: Securing the web app with a WAF/App Gateway - ERIC</p>
-<ul>
-<li>Intro to WAF/App Gateway</li>
-<li>Add WAF module (lot&#39;s of stuff)</li>
-<li>Deploy to dev &amp; prod</li>
-<li>Test</li>
-</ul>
-</li>
-<li><p>Closing remarks</p>
-</li>
-</ul>
 <p>Our speakers include:</p>
 <ul>
 <li><p><a href="https://www.linkedin.com/in/eric-rhoads">Eric Rhoads</a></p>
 <ul>
-<li>Cloud Solution Architect (CSA), <a href="http://kizan.com">KiZAN Technologies</a></li>
+<li>Azure Cloud Solution Architect (CSA), <a href="http://kizan.com">KiZAN Technologies</a></li>
 </ul>
 </li>
 <li><p><a href="https://twitter.com/mikebranstein">Mike Branstein</a></p>
 <ul>
-<li>Cloud Solution Architect (CSA), <a href="http://kizan.com">KiZAN Technologies</a></li>
+<li>Azure Cloud Solution Architect (CSA), <a href="http://kizan.com">KiZAN Technologies</a></li>
 <li><a href="https://brosteins.com">Brosteins</a></li>
 <li><a href="https://www.linkedin.com/in/mikebranstein/">LinkedIn</a></li>
 </ul>

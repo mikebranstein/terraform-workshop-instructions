@@ -33,89 +33,13 @@ Terraform lets teams easily use the same configurations in multiple places to re
 
 ### About the Workshop
 
-
-#TODO: remove next section when finished
-
-Add more verbiage here.
-
-- VM image (Mike) - DONE
-    - Windows 10
-    - Visual Studio 2019
-    - .NET Core 2.2
-    - VS Code
-    - Terraform (in path)
-    - Chrome pre-installed
-- Update the ARM Template to use stored VM image - DONE
-- Update ARM Template to include
-    - Storage Account
-- Deployed VM & Storage Account from ARM Template
-
-- TF (Eric)
-    - Modular TF using Storage account as backend
-    - Module for App Service and SQL
-    - Module for Shared Services - WAF/App Gateway
-    - parameterization in modules
-        - RG
-        - Environment
-    - High-level Main.tf for dev and prod
-
-Web App (Mike)
-    - Fabrikam
-    - .NET Solution
-
-
-Potential agenda:
-- Brief Intro/Presentation/About Terraform - MIKE
-
-DONE - Chapter 0: Create an Azure Subscription if you need one - MIKE
-
-- Chapter 1: Getting started quick - MIKE
-    - Setup VM
-    - Subscription ID & Tenant ID
-    - Create RG view in portal
-
-- Chapter 2: - ERIC
-    - Use new TF code to add:
-        - RG
-        - App Service Plan
-        - App Service
-    - A side callout/discussion on naming standards
-        - lowercase, dashes, etc.
-    - Deploy this (w/o modules to Azure)
-    - Test that website works (default IIS page)
-
-- Chatper 3: Modules - ERIC
-    - Refactor what we just deployed into a module-like process
-    - Blow away existing RG
-    - Re-deploy to dev
-    - Deploy to production
-
-DONE - Chapter 4: State management and adding a new module - MIKE
-    - Discuss State Management, why it's important
-    - Setup TF Backend and explain chicken/egg scenario
-    - Deploy, test, view statefile
-
-ALMOST DONE - Chapter 5: Add SQL and Deploy App - MIKE
-    - Add in SQL Database
-    - Use VS to deploy the app to App Service
-    - deploy to dev/prod
-    - test
-
-- Chapter 6: Securing the web app with a WAF/App Gateway - ERIC
-    - Intro to WAF/App Gateway
-    - Add WAF module (lot's of stuff)
-    - Deploy to dev & prod
-    - Test
-
-- Closing remarks
-
 Our speakers include:
 
 * [Eric Rhoads](https://www.linkedin.com/in/eric-rhoads)
-    * Cloud Solution Architect (CSA), [KiZAN Technologies](http://kizan.com)
+    * Azure Cloud Solution Architect (CSA), [KiZAN Technologies](http://kizan.com)
 
 * [Mike Branstein](https://twitter.com/mikebranstein)
-    * Cloud Solution Architect (CSA), [KiZAN Technologies](http://kizan.com)
+    * Azure Cloud Solution Architect (CSA), [KiZAN Technologies](http://kizan.com)
     * [Brosteins](https://brosteins.com)
     * [LinkedIn](https://www.linkedin.com/in/mikebranstein/)
 
