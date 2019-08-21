@@ -57,7 +57,7 @@ Finally, close the resource group, by clicking the *X* in the upper right corner
 
 Now that you have the VM's resource group pinned to your dashboard, it will be easy to locate the VM in later exercises.
 
-Go ahead and click ont he Virtual machine, then pin it to the dashboard. When you're finished, you should see something like this:
+Go ahead and click on the Virtual machine, then pin it to the dashboard. When you're finished, you should see something like this:
 
 <img src="images/chapter1/vm-pin.gif" class="img-medium" />
 
