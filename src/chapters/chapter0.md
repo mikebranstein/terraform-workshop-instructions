@@ -249,7 +249,7 @@ When the page loads, you'll see this custom deployment page:
 #### Under *Basics*, select/enter the following
 - Subscription: *your Azure subscription*
 - Resource group: *Create new*
-- Resource group name: *workshop-rg*, or some other name that's easy to remember
+- Resource group name: *workshop-vm-rg*, (the name of the RG you created previously)
 - Location: *East US*
 - Os Blob Uri: *the URI of the virtual machine image you just finished copying*
 
