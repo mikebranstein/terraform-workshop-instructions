@@ -157,7 +157,7 @@ Update the code by chaning the values for `storage_account_name`, `resource_grou
 
 #### Updating the prod main.tf file
 
-Open your main.tf for dev and add the following terraform code to the top of the file.
+Open your main.tf for prod and add the following terraform code to the top of the file.
 
 ```json
 terraform {

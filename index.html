@@ -824,7 +824,7 @@ resource &quot;azurerm_app_service&quot; &quot;app1_app_service&quot; {
 </code></pre>
 <p>Update the code by chaning the values for <code>storage_account_name</code>, <code>resource_group_name</code>, <code>subscription_id</code>, and <code>tenant_id</code>.</p>
 <h4 id="updating-the-prod-main-tf-file">Updating the prod main.tf file</h4>
-<p>Open your main.tf for dev and add the following terraform code to the top of the file.</p>
+<p>Open your main.tf for prod and add the following terraform code to the top of the file.</p>
 <pre><code class="lang-json">terraform {
   backend &quot;azurerm&quot; {
     storage_account_name = &quot;storage-account-name&quot;
