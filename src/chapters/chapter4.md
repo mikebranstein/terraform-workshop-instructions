@@ -21,7 +21,7 @@ Imagine you're trying to create a virtual machine using Terraform, and the first
 
 Terraform answers these questions by keeping a cached environment configuration within a file - the state file. When *terraform apply* is run, it examines the state file, and reads the environment configuration, then determines whether it will create, update, or delete resources. Even though Terraform can query the destination environment to see if resources exist, and create a plan from the *live* information, it's much faster to cache the environment state and work from it locally. 
 
-There are other benefits from managing state in a local file, but we're not goign to cover those in today's workshop. 
+There are other benefits from managing state in a local file, but we're not going to cover those in today's workshop. 
 
 #### State file specifics.
 
