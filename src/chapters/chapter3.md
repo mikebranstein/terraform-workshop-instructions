@@ -234,7 +234,7 @@ Now that your Azure environment is cleaned up, let's deploy the resources like w
 First make sure we are in the c:\terraform\dev folder in our terminal. If not, cd to the appropriate folder level:
 
 ```bash
-cd c:\terraform
+cd c:\terraform\dev
 ```
 
 Run `terraform init` to initialize our configuration - you have to do this again because the new root `main.tf` file is located in a new sub-folder, `dev`.
