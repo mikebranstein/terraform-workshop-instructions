@@ -201,13 +201,13 @@ Using the Bash Cloud Shell, run various Azure CLI commands.
 Create a resource group named workshop-vm-rg:
 
 ```bash
-az group create --location eastus --name workshop-vm-rg
+az group create --location eastus --name workshop-rg
 ```
 
 Create a storage account in the resource group. Be sure to replace <storage-account-name> with a random storage account name (It must be unique!). For example, I used *mysameb2019*:
 
 ```bash
-az storage account create --name <storage-account-name> --resource-group workshop-vm-rg --location eastus
+az storage account create --name <storage-account-name> --resource-group workshop-rg --location eastus
 ```
 
 Create a container in your storage account to hold VHDs:
@@ -248,8 +248,7 @@ When the page loads, you'll see this custom deployment page:
 
 #### Under *Basics*, select/enter the following
 - Subscription: *your Azure subscription*
-- Resource group: *Create new*
-- Resource group name: *workshop-rg*, or some other name that's easy to remember
+- Resource group: *workshop-rg*
 - Location: *East US*
 - Os Blob Uri: *the URI of the virtual machine image you just finished copying*
 
