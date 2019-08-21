@@ -99,7 +99,7 @@ az storage container create --account-name {storage-account-name} --name prod
 
 > **Organizing State Files**
 >
-> As you store your state files, it's important to organize them so yhou don't accidentally overwrite or lose it. We're using a simple naming scheme of *dev* and *prod* to store ours, but you may need something more sophistocated in the real world.
+> As you store your state files, it's important to organize them so you don't accidentally overwrite or lose it. We're using a simple naming scheme of *dev* and *prod* to store ours, but you may need something more sophistocated in the real world.
 
 Now that your storage account is created, navigate to the storage account *Access control (IAM)* page in the Azure portal:
 
