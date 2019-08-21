@@ -900,7 +900,7 @@ resource &quot;azurerm_sql_database&quot; &quot;app1_db&quot; {
 }
 
 resource &quot;azurerm_sql_firewall_rule&quot; &quot;test&quot; {
-  name                = &quot;tf-az-${var.application_name}-${var.environment}-allow-azure-sqlfw&quot;
+  name                = &quot;tf-az-${var.application_name}-${var.environment}-allow-azure-sqlfw${random_integer.ri.result}&quot;
   resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
   server_name         = &quot;${azurerm_sql_server.standard_sql_server.name}&quot;
   start_ip_address    = &quot;0.0.0.0&quot; # tells Azure to allow Azure services
@@ -927,7 +927,7 @@ variable &quot;sql_administrator_password&quot; {
     application_name           = &quot;app1&quot;
     location                   = &quot;East US&quot;
     application_plan_tier      = &quot;Basic&quot;
-    application_plan           = &quot;B1&quot;
+    application_plan_size      = &quot;B1&quot;
     sql_administrator_login    = &quot;sqladmin&quot;
     sql_administrator_password = &quot;SQLP@ss123&quot;
 }
@@ -939,7 +939,7 @@ variable &quot;sql_administrator_password&quot; {
     application_name           = &quot;app1&quot;
     location                   = &quot;East US&quot;
     application_plan_tier      = &quot;Basic&quot;
-    application_plan           = &quot;B1&quot;
+    application_plan_size      = &quot;B1&quot;
     sql_administrator_login    = &quot;sqladmin&quot;
     sql_administrator_password = &quot;SQLP@ss123&quot;
 }
@@ -1175,21 +1175,21 @@ resource &quot;azurerm_public_ip&quot; &quot;gateway_pip&quot; {
     allocation_method   = &quot;Static&quot;
 }
 
-#Application Gateway
+# App Gateway
 resource &quot;azurerm_application_gateway&quot; &quot;gateway&quot; {
-    name     = &quot;tf-az-${var.functional_name}-${var.environment}-ag&quot;
-    location = &quot;${var.location}&quot;
-    resource_group_name = &quot;${azurerm_resource_group.shared_rg}&quot;
+    name                = &quot;tf-az-${var.functional_name}-${var.environment}-ag&quot;
+    location            = &quot;${var.location}&quot;
+    resource_group_name = &quot;${azurerm_resource_group.shared_rg.name}&quot;
 
     sku {
-        name     = &quot;Standard_Medium&quot;
-        tier     = &quot;WAF_v2&quot;
-        capacity = 1
+        name        = &quot;WAF_v2&quot;
+        tier        = &quot;WAF_v2&quot;
+        capacity    = 1
     }
 
     gateway_ip_configuration {
-        name      = &quot;tf-az-${var.functional_name}-ip-configuration&quot;
-        subnet_id = &quot;${var.gateway_subnet_id}&quot;
+        name        = &quot;tf-az-${var.functional_name}-ip-configuration&quot;
+        subnet_id   = &quot;${var.gateway_subnet_id}&quot;
     }
 
     frontend_port {
@@ -1198,35 +1198,35 @@ resource &quot;azurerm_application_gateway&quot; &quot;gateway&quot; {
     }
 
     frontend_ip_configuration {
-        name                 = &quot;tf-az-${var.functional_name}-feip&quot;
-        public_ip_address_id = &quot;${azurerm_public_ip.test.id}&quot;
+        name                    = &quot;tf-az-${var.functional_name}-feip&quot;
+        public_ip_address_id    = &quot;${azurerm_public_ip.gateway_pip.id}&quot;
     }
 
     backend_address_pool {
-        name = &quot;tf-az-${var.application_name}-beap&quot;
-        fqdns = [&quot;${var.app_service_fqdn}&quot;]
+        name    = &quot;tf-az-${var.application_name}-beap&quot;
+        fqdns   = [&quot;${var.app_service_fqdn}&quot;]
     }
 
     backend_http_settings {
-        name                  = &quot;tf-az-${var.application_name}-http-80&quot;
-        cookie_based_affinity = &quot;Disabled&quot;
-        path                  = &quot;/&quot;
-        port                  = 80
-        protocol              = &quot;Http&quot;
-        request_timeout       = 20
+        name                    = &quot;tf-az-${var.application_name}-http-80&quot;
+        cookie_based_affinity   = &quot;Disabled&quot;
+        path                    = &quot;/&quot;
+        port                    = 80
+        protocol                = &quot;Http&quot;
+        request_timeout         = 20
     }
 
     http_listener {
-        name                           = &quot;tf-az-${var.application_name}-listener&quot;
-        frontend_ip_configuration_name = &quot;tf-az-${var.application_name}-feip&quot;
-        frontend_port_name             = &quot;tf-az-${var.application_name}-fep-80&quot;
-        protocol                       = &quot;Http&quot;
+        name                            = &quot;tf-az-${var.application_name}-listener&quot;
+        frontend_ip_configuration_name  = &quot;tf-az-${var.functional_name}-feip&quot;
+        frontend_port_name              = &quot;tf-az-${var.functional_name}-fep-80&quot;
+        protocol                        = &quot;Http&quot;
     }
 
     request_routing_rule {
         name                        = &quot;tf-az-${var.application_name}-rule&quot;
         rule_type                   = &quot;Basic&quot;
-        http_listener_name          = &quot;tf-az-${var.application_name}-listener&quot;
+        http_listener_name =        &quot;tf-az-${var.application_name}-listener&quot;
         backend_address_pool_name   = &quot;tf-az-${var.application_name}-beap&quot;
         backend_http_settings_name  = &quot;tf-az-${var.application_name}-http-80&quot;
     }

@@ -40,7 +40,7 @@ resource "azurerm_sql_database" "app1_db" {
 }
 
 resource "azurerm_sql_firewall_rule" "test" {
-  name                = "tf-az-${var.application_name}-${var.environment}-allow-azure-sqlfw"
+  name                = "tf-az-${var.application_name}-${var.environment}-allow-azure-sqlfw${random_integer.ri.result}"
   resource_group_name = "${azurerm_resource_group.application_rg.name}"
   server_name         = "${azurerm_sql_server.standard_sql_server.name}"
   start_ip_address    = "0.0.0.0" # tells Azure to allow Azure services
@@ -80,7 +80,7 @@ module "standard_application" {
     application_name           = "app1"
     location                   = "East US"
     application_plan_tier      = "Basic"
-    application_plan           = "B1"
+    application_plan_size      = "B1"
     sql_administrator_login    = "sqladmin"
     sql_administrator_password = "SQLP@ss123"
 }
@@ -96,7 +96,7 @@ module "standard_application" {
     application_name           = "app1"
     location                   = "East US"
     application_plan_tier      = "Basic"
-    application_plan           = "B1"
+    application_plan_size      = "B1"
     sql_administrator_login    = "sqladmin"
     sql_administrator_password = "SQLP@ss123"
 }
