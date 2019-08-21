@@ -1208,12 +1208,13 @@ resource &quot;azurerm_application_gateway&quot; &quot;gateway&quot; {
     }
 
     backend_http_settings {
-        name                    = &quot;tf-az-${var.application_name}-http-80&quot;
-        cookie_based_affinity   = &quot;Disabled&quot;
-        path                    = &quot;/&quot;
-        port                    = 80
-        protocol                = &quot;Http&quot;
-        request_timeout         = 20
+        name                                = &quot;tf-az-${var.application_name}-http-80&quot;
+        cookie_based_affinity               = &quot;Disabled&quot;
+        path                                = &quot;/&quot;
+        port                                = 80
+        protocol                            = &quot;Http&quot;
+        request_timeout                     = 20
+        pick_host_name_from_backend_address = true 
     }
 
     http_listener {
