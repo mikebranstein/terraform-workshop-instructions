@@ -208,6 +208,10 @@ Before we deploy the web app, let's take a moment to update the database connect
 
 Open the appsettings.json file and replace the *DefaultConnection* database connection string with the connection string to your SQL database. Remember, you saved this connection string earlier in the chapter.
 
+> **WARNING**
+>
+> You cannot just copy/paste the connection string. Inside the connection string is a username and password field that needs completed. The username and password is inside of your Terraform code - find it in `main.tf` and replace the values!
+
 <img src="images/chapter5/appsettings.png" class="img-small" />
 
 With the connection string updated, let's start the deployment process.

@@ -1012,6 +1012,10 @@ variable &quot;sql_administrator_password&quot; {
 <p>In this exercise, let&#39;s start by deploying to the dev site. We won&#39;t actually deploy to the prod site, but that should be easy enough to do on your own once you&#39;ve done it in dev.</p>
 <p>Before we deploy the web app, let&#39;s take a moment to update the database connection string with the proper settings.</p>
 <p>Open the appsettings.json file and replace the <em>DefaultConnection</em> database connection string with the connection string to your SQL database. Remember, you saved this connection string earlier in the chapter.</p>
+<blockquote>
+<p><strong>WARNING</strong></p>
+<p>You cannot just copy/paste the connection string. Inside the connection string is a username and password field that needs completed. The username and password is inside of your Terraform code - find it in <code>main.tf</code> and replace the values!</p>
+</blockquote>
 <p><img src="images/chapter5/appsettings.png" class="img-small" /></p>
 <p>With the connection string updated, let&#39;s start the deployment process.</p>
 <p>From Visual Studio, right-click the <em>ContosoUniversity</em> project and select <em>Publish</em>. In the web publish window, select <em>Microsoft Azure App Service</em>, <em>Select Existing</em>, and press <em>Publish</em>. </p>
