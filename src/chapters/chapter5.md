@@ -24,7 +24,7 @@ Start by opening the *standard_application* module's main.tf file. Add the follo
 
 ```
 resource "azurerm_sql_server" "standard_sql_server" {
-  name                         = "tf-az-standard-sql-${var.environment}"
+  name                         = "tf-az-standard-sql-${var.environment}-${random_integer.ri.result}"
   resource_group_name          = "${azurerm_resource_group.application_rg.name}"
   location                     = "${var.location}"
   version                      = "12.0"
@@ -48,7 +48,7 @@ resource "azurerm_sql_firewall_rule" "test" {
 }
 ```
 
-The first declaration creates an Azure SQL Server named `tf-az-standard-sql-{env}`. The second adds a database named `tf-az-${var.application_name}--${var.environment}-db` to the SQL Server. The third enables other Azure services to communicate with the SQL Server. 
+The first declaration creates an Azure SQL Server named `tf-az-standard-sql-{env}-{random-integer}` (you'll notice we re-used the same rnadom integer value to ensure the SQL Server name was unique). The second adds a database named `tf-az-${var.application_name}--${var.environment}-db` to the SQL Server. The third enables other Azure services to communicate with the SQL Server. 
 
 Notice we left the start_ip_address and end_ip_address as hard-coded values. We want to keep these inputs static so we did not generalize them. This will also not affect the dynamic creation of said rule, as it should be the same every time it gets created by Terraform.
 

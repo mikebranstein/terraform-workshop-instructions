@@ -145,9 +145,15 @@ resource "azurerm_app_service_plan" "standard_app_plan" {
     }
 }
 
+# Random Integer for Unique Names
+resource "random_integer" "ri" {
+    min = 10000
+    max = 99999
+}
+
 # App Service
 resource "azurerm_app_service" "app1_app_service" {
-    name                = "tf-az-${var.application_name}-${var.environment}-app"
+    name                = "tf-az-${var.application_name}-${var.environment}-app${random_integer.ri.result}"
     location            = "${var.location}"
     resource_group_name = "${azurerm_resource_group.application_rg.name}"
     app_service_plan_id = "${azurerm_app_service_plan.standard_app_plan.id}"

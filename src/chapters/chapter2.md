@@ -85,7 +85,7 @@ Let's start by declaring an Azure resource group.
 Copy and paste the below section to create a new resource group:
 
 ```
-#Resource Group
+# Resource Group
 resource "azurerm_resource_group" "application_rg" {
     name     = "tf-az-app1-dev-rg"
     location = "East US"
@@ -129,8 +129,14 @@ Looking back at the App Service Plan you just created, notice the "location" and
 Now that we have declared the Plan our Application Service will use, let's create the Azure Web App. Use the following code and add it to your main.tf file:
 
 ```
+# Random Integer for App Service
+resource "random_integer" "ri" {
+    min = 10000
+    max = 99999
+}
+
 resource "azurerm_app_service" "app1_app_service" {
-    name = "tf-az-app1-dev-app"
+    name = "tf-az-app1-dev-app${random_integer.ri.result}"
     location = "East US"
     resource_group_name = "${azurerm_resource_group.application_rg.name}"
     app_service_plan_id = "${azurerm_app_service_plan.standard_app_plan.id}"
@@ -145,10 +151,11 @@ resource "azurerm_app_service" "app1_app_service" {
 >
 > In some cases, you cannot use dashes in names of Azure resources (ex. Storage Account) so an alternative is to keep everything lowercase and have no separation of key words with dashes if you want to keep names uniform across the board.
 >
-> Some resources must also have globally unique names (like Storage Accounts...again), so you may need adjust names accordingly.
+> Some resources must also have globally unique names (like Storage Accounts...again), so you may need adjust names accordingly. 
+
+You may have noticed the random integer code block above - that's present to ensure you have a unique app service.
 
 This concludes the exercise.
-
 
 <div class="exercise-end"></div>
 

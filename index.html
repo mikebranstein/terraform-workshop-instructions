@@ -418,7 +418,7 @@
 <p>Formally, resource groups provide a way to monitor, control access, provision and manage billing for collections of assets that are required to run an application, or used by a client or company department. Informally, think of resource groups like a file system folder, but instead of holding files and other folders, resource groups hold azure objects like storage accounts, web apps, functions, etc.</p>
 </blockquote>
 <p>Copy and paste the below section to create a new resource group:</p>
-<pre><code>#Resource Group
+<pre><code># Resource Group
 resource &quot;azurerm_resource_group&quot; &quot;application_rg&quot; {
     name     = &quot;tf-az-app1-dev-rg&quot;
     location = &quot;East US&quot;
@@ -450,8 +450,14 @@ resource &quot;azurerm_resource_group&quot; &quot;application_rg&quot; {
 </blockquote>
 <p>Looking back at the App Service Plan you just created, notice the &quot;location&quot; and &quot;resource_group_name&quot; properties. We used the dot-notation to obtain their values. We can pull other properties from other declared resources using the syntax &quot;azurerm_&lt;resource_type&gt;.&lt;resource_alias&gt;.&quot;. In this case the resource type is &quot;resource_group&quot;, the resource alias is &quot;application_rg&quot; (We provided the resource alias in the previous code snippet next to the declaration of the resource type), and the property we care about for location is &quot;.location&quot; and for resource_group_name it&#39;s &quot;.name&quot;.</p>
 <p>Now that we have declared the Plan our Application Service will use, let&#39;s create the Azure Web App. Use the following code and add it to your main.tf file:</p>
-<pre><code>resource &quot;azurerm_app_service&quot; &quot;app1_app_service&quot; {
-    name = &quot;tf-az-app1-dev-app&quot;
+<pre><code># Random Integer for App Service
+resource &quot;random_integer&quot; &quot;ri&quot; {
+    min = 10000
+    max = 99999
+}
+
+resource &quot;azurerm_app_service&quot; &quot;app1_app_service&quot; {
+    name = &quot;tf-az-app1-dev-app${random_integer.ri.result}&quot;
     location = &quot;East US&quot;
     resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
     app_service_plan_id = &quot;${azurerm_app_service_plan.standard_app_plan.id}&quot;
@@ -463,8 +469,9 @@ resource &quot;azurerm_resource_group&quot; &quot;application_rg&quot; {
 <blockquote>
 <p><strong>WARNING: Watch out for platform limitations when naming resources</strong></p>
 <p>In some cases, you cannot use dashes in names of Azure resources (ex. Storage Account) so an alternative is to keep everything lowercase and have no separation of key words with dashes if you want to keep names uniform across the board.</p>
-<p>Some resources must also have globally unique names (like Storage Accounts...again), so you may need adjust names accordingly.</p>
+<p>Some resources must also have globally unique names (like Storage Accounts...again), so you may need adjust names accordingly. </p>
 </blockquote>
+<p>You may have noticed the random integer code block above - that&#39;s present to ensure you have a unique app service.</p>
 <p>This concludes the exercise.</p>
 <div class="exercise-end"></div>
 
@@ -618,9 +625,15 @@ resource &quot;azurerm_app_service_plan&quot; &quot;standard_app_plan&quot; {
     }
 }
 
+# Random Integer for Unique Names
+resource &quot;random_integer&quot; &quot;ri&quot; {
+    min = 10000
+    max = 99999
+}
+
 # App Service
 resource &quot;azurerm_app_service&quot; &quot;app1_app_service&quot; {
-    name                = &quot;tf-az-${var.application_name}-${var.environment}-app&quot;
+    name                = &quot;tf-az-${var.application_name}-${var.environment}-app${random_integer.ri.result}&quot;
     location            = &quot;${var.location}&quot;
     resource_group_name = &quot;${azurerm_resource_group.application_rg.name}&quot;
     app_service_plan_id = &quot;${azurerm_app_service_plan.standard_app_plan.id}&quot;
@@ -768,7 +781,7 @@ resource &quot;azurerm_app_service&quot; &quot;app1_app_service&quot; {
 <p>As you store your state files, it&#39;s important to organize them so yhou don&#39;t accidentally overwrite or lose it. We&#39;re using a simple naming scheme of <em>dev</em> and <em>prod</em> to store ours, but you may need something more sophistocated in the real world.</p>
 </blockquote>
 <p>Now that your storage account is created, navigate to the storage account <em>Access control (IAM)</em> page in the Azure portal:</p>
-<p><img src="images/chapter4/storage-iam.png" class="img-small" /></p>
+<p><img src="images/chapter4/storage-iam.png" class="img-override" /></p>
 <p>Click <em>Role Assignments</em>, then <em>Add</em> a Role Assignment to give your virtual machine access to read/write data to the storage account.</p>
 <ul>
 <li>Role: Storage Blob Data Contributor</li>
@@ -777,13 +790,13 @@ resource &quot;azurerm_app_service&quot; &quot;app1_app_service&quot; {
 </ul>
 <p>Then, select the VM name you&#39;re using for the workshop.</p>
 <p>Click <em>Save</em>.</p>
-<p><img src="images/chapter4/role-assignment.png" class="img-small" /></p>
+<p><img src="images/chapter4/role-assignment.png" class="img-override" /></p>
 <p>This concludes the exercise.</p>
 <div class="exercise-end"></div>
 
 <p>Now that we have a storage account, let&#39;s update our Terraform code to use it.</p>
 <h4 class="exercise-start">
-    <b>Exercise</b>: Create a Storage Account
+    <b>Exercise</b>: Using a storage account as the backend
 </h4>
 
 <p>Before we get started, collect the following information:</p>
@@ -800,6 +813,7 @@ resource &quot;azurerm_app_service&quot; &quot;app1_app_service&quot; {
 <pre><code class="lang-json">terraform {
   backend &quot;azurerm&quot; {
     storage_account_name = &quot;storage-account-name&quot;
+    resource_group_name  = &quot;storage-account-resource-group-name&quot;
     container_name       = &quot;dev&quot;
     key                  = &quot;terraform.tfstate&quot;
     use_msi              = true
@@ -808,12 +822,13 @@ resource &quot;azurerm_app_service&quot; &quot;app1_app_service&quot; {
   }
 }
 </code></pre>
-<p>Update the code by chaning the values for <code>storage_account_name</code>, <code>subscription_id</code>, and <code>tenant_id</code>.</p>
+<p>Update the code by chaning the values for <code>storage_account_name</code>, <code>resource_group_name</code>, <code>subscription_id</code>, and <code>tenant_id</code>.</p>
 <h4 id="updating-the-prod-main-tf-file">Updating the prod main.tf file</h4>
 <p>Open your main.tf for dev and add the following terraform code to the top of the file.</p>
 <pre><code class="lang-json">terraform {
   backend &quot;azurerm&quot; {
     storage_account_name = &quot;storage-account-name&quot;
+    resource_group_name  = &quot;storage-account-resource-group-name&quot;
     container_name       = &quot;prod&quot;
     key                  = &quot;terraform.tfstate&quot;
     use_msi              = true
@@ -822,7 +837,7 @@ resource &quot;azurerm_app_service&quot; &quot;app1_app_service&quot; {
   }
 }
 </code></pre>
-<p>Update the code by chaning the values for <code>storage_account_name</code>, <code>subscription_id</code>, and <code>tenant_id</code>.</p>
+<p>Update the code by chaning the values for <code>storage_account_name</code>, <code>resource_group_name</code>, <code>subscription_id</code>, and <code>tenant_id</code>.</p>
 <h4 id="testing-your-changes">Testing your changes</h4>
 <p>Navigate to the dev directory, where main.tf exists. Initialize Terraform.</p>
 <pre><code class="lang-bash">terraform init
@@ -869,7 +884,7 @@ resource &quot;azurerm_app_service&quot; &quot;app1_app_service&quot; {
 
 <p>Start by opening the <em>standard_application</em> module&#39;s main.tf file. Add the following to the bottom:</p>
 <pre><code>resource &quot;azurerm_sql_server&quot; &quot;standard_sql_server&quot; {
-  name                         = &quot;tf-az-standard-sql-${var.environment}&quot;
+  name                         = &quot;tf-az-standard-sql-${var.environment}-${random_integer.ri.result}&quot;
   resource_group_name          = &quot;${azurerm_resource_group.application_rg.name}&quot;
   location                     = &quot;${var.location}&quot;
   version                      = &quot;12.0&quot;
@@ -891,7 +906,7 @@ resource &quot;azurerm_sql_firewall_rule&quot; &quot;test&quot; {
   start_ip_address    = &quot;0.0.0.0&quot; # tells Azure to allow Azure services
   end_ip_address      = &quot;0.0.0.0&quot; # tells Azure to allow Azure serivces
 }
-</code></pre><p>The first declaration creates an Azure SQL Server named <code>tf-az-standard-sql-{env}</code>. The second adds a database named <code>tf-az-${var.application_name}--${var.environment}-db</code> to the SQL Server. The third enables other Azure services to communicate with the SQL Server. </p>
+</code></pre><p>The first declaration creates an Azure SQL Server named <code>tf-az-standard-sql-{env}-{random-integer}</code> (you&#39;ll notice we re-used the same rnadom integer value to ensure the SQL Server name was unique). The second adds a database named <code>tf-az-${var.application_name}--${var.environment}-db</code> to the SQL Server. The third enables other Azure services to communicate with the SQL Server. </p>
 <p>Notice we left the start_ip_address and end_ip_address as hard-coded values. We want to keep these inputs static so we did not generalize them. This will also not affect the dynamic creation of said rule, as it should be the same every time it gets created by Terraform.</p>
 <h4 id="update-the-module-variables">Update the module variables</h4>
 <p>You may have noticed we&#39;re using several new variables. Let&#39;s add them to the end of the <code>variables.tf</code> file:</p>

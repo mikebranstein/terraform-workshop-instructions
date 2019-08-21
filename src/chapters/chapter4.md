@@ -103,7 +103,7 @@ az storage container create --account-name {storage-account-name} --name prod
 
 Now that your storage account is created, navigate to the storage account *Access control (IAM)* page in the Azure portal:
 
-<img src="images/chapter4/storage-iam.png" class="img-small" />
+<img src="images/chapter4/storage-iam.png" class="img-override" />
 
 Click *Role Assignments*, then *Add* a Role Assignment to give your virtual machine access to read/write data to the storage account.
 
@@ -115,7 +115,7 @@ Then, select the VM name you're using for the workshop.
 
 Click *Save*.
 
-<img src="images/chapter4/role-assignment.png" class="img-small" />
+<img src="images/chapter4/role-assignment.png" class="img-override" />
 
 This concludes the exercise.
 
@@ -124,7 +124,7 @@ This concludes the exercise.
 Now that we have a storage account, let's update our Terraform code to use it.
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Create a Storage Account
+    <b>Exercise</b>: Using a storage account as the backend
 </h4>
 
 Before we get started, collect the following information:
@@ -143,6 +143,7 @@ Open your main.tf for dev and add the following terraform code to the top of the
 terraform {
   backend "azurerm" {
     storage_account_name = "storage-account-name"
+    resource_group_name  = "storage-account-resource-group-name"
     container_name       = "dev"
     key                  = "terraform.tfstate"
     use_msi              = true
@@ -152,7 +153,7 @@ terraform {
 }
 ```
 
-Update the code by chaning the values for `storage_account_name`, `subscription_id`, and `tenant_id`.
+Update the code by chaning the values for `storage_account_name`, `resource_group_name`, `subscription_id`, and `tenant_id`.
 
 #### Updating the prod main.tf file
 
@@ -162,6 +163,7 @@ Open your main.tf for dev and add the following terraform code to the top of the
 terraform {
   backend "azurerm" {
     storage_account_name = "storage-account-name"
+    resource_group_name  = "storage-account-resource-group-name"
     container_name       = "prod"
     key                  = "terraform.tfstate"
     use_msi              = true
@@ -171,7 +173,7 @@ terraform {
 }
 ```
 
-Update the code by chaning the values for `storage_account_name`, `subscription_id`, and `tenant_id`.
+Update the code by chaning the values for `storage_account_name`, `resource_group_name`, `subscription_id`, and `tenant_id`.
 
 #### Testing your changes
 
