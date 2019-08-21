@@ -1,13 +1,9 @@
 ## Developing Reusable Code
 
-<<<<<<< HEAD
-In this chapter we are going to focus on creating a re-usable module in Terraform. 
-=======
 In this chapter you'll learn:
 - What a Terraform module is
 - How to generalize Terraform code to make it reusable
 - Use variables to pass data into modules
->>>>>>> 4f512a475df4a09491acae3a519dd66e548c3d06
 
 ### Terraform Modules
 
@@ -102,18 +98,10 @@ variable "environment" {
     description = "Environment of all deployed resources"
 }
 ```
-<<<<<<< HEAD
 >**More on variables**
-=======
-
-> **A word on variables**
->
-> These seven variables will give us what we need to generalize the module. There could be more variables if we desired, or less if we still wanted to hard code certain elements (like the plan tier and size) to the module. This comes down to what you are trying to achieve with the module. For instance, if you want all your standard apps to share the same plan tier you can exclude it from the variables file and just declare the desired value directly in the "main.tf" file.
->>>>>>> 4f512a475df4a09491acae3a519dd66e548c3d06
 >
 > We like to think of modules like an API. The variables represent input values that allow the module to be flexible and provision different infrastructure configurations - they form the API's surface and interface. The module's `main.tf` code then represents the implementation of the API. 
 
-<<<<<<< HEAD
 With our freshly declared variables, let's open up the "output.tf" file and paste the following:
 
 ```
@@ -125,9 +113,6 @@ output "app_service_fqdn" {
 We will be using this output in a future chapter, and will discuss this in more detail at that time.
 
 Let's move on to the "main.tf" file and begin generalizing the resources we previously created.
-=======
-With our freshly declared variables, let's open up the *standard_application* `main.tf` file and begin generalizing the resources we previously created.
->>>>>>> 4f512a475df4a09491acae3a519dd66e548c3d06
 
 Replace the existing Resource Group block with the following code:
 

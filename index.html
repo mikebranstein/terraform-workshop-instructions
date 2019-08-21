@@ -512,28 +512,11 @@ resource &quot;azurerm_resource_group&quot; &quot;application_rg&quot; {
 			<hr>
 			<div class="chapter">
 				<h2 id="developing-reusable-code">Developing Reusable Code</h2>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</p>
-<h1 id="in-this-chapter-we-are-going-to-focus-on-creating-a-re-usable-module-in-terraform-">In this chapter we are going to focus on creating a re-usable module in Terraform. </h1>
 <p>In this chapter you&#39;ll learn:</p>
 <ul>
 <li>What a Terraform module is</li>
 <li>How to generalize Terraform code to make it reusable</li>
-<li>Use variables to pass data into modules<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>4f512a475df4a09491acae3a519dd66e548c3d06</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</li>
+<li>Use variables to pass data into modules</li>
 </ul>
 <h3 id="terraform-modules">Terraform Modules</h3>
 <p>In the last chapter, you wrote your first Terraform code, and learned three Terraform commands: init, plan, and apply. As your Terraform code becomes more complex, and you do more deployments, you may find the need to reuse Terraform code. You can do this with modules.</p>
@@ -600,51 +583,16 @@ variable &quot;application_name&quot; {
 variable &quot;environment&quot; {
     description = &quot;Environment of all deployed resources&quot;
 }
-</code></pre><p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</p>
-<blockquote>
-<h1 id="more-on-variables"><strong>More on variables</strong></h1>
-</blockquote>
-<blockquote>
-<p><strong>A word on variables</strong></p>
-<p>These seven variables will give us what we need to generalize the module. There could be more variables if we desired, or less if we still wanted to hard code certain elements (like the plan tier and size) to the module. This comes down to what you are trying to achieve with the module. For instance, if you want all your standard apps to share the same plan tier you can exclude it from the variables file and just declare the desired value directly in the &quot;main.tf&quot; file.</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>4f512a475df4a09491acae3a519dd66e548c3d06</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
+</code></pre><blockquote>
+<p><strong>More on variables</strong></p>
 <p>We like to think of modules like an API. The variables represent input values that allow the module to be flexible and provision different infrastructure configurations - they form the API&#39;s surface and interface. The module&#39;s <code>main.tf</code> code then represents the implementation of the API. </p>
 </blockquote>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD
-With our freshly declared variables, let&#39;s open up the &quot;output.tf&quot; file and paste the following:</p>
+<p>With our freshly declared variables, let&#39;s open up the &quot;output.tf&quot; file and paste the following:</p>
 <pre><code>output &quot;app_service_fqdn&quot; {
     value = &quot;${azurerm_app_service.app1_app_service.default_site_hostname}&quot;
 }
 </code></pre><p>We will be using this output in a future chapter, and will discuss this in more detail at that time.</p>
-<h1 id="let-s-move-on-to-the-main-tf-file-and-begin-generalizing-the-resources-we-previously-created-">Let&#39;s move on to the &quot;main.tf&quot; file and begin generalizing the resources we previously created.</h1>
-<p>With our freshly declared variables, let&#39;s open up the <em>standard_application</em> <code>main.tf</code> file and begin generalizing the resources we previously created.</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>4f512a475df4a09491acae3a519dd66e548c3d06</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
+<p>Let&#39;s move on to the &quot;main.tf&quot; file and begin generalizing the resources we previously created.</p>
 <p>Replace the existing Resource Group block with the following code:</p>
 <pre><code># Resource Group
 resource &quot;azurerm_resource_group&quot; &quot;application_rg&quot; {
