@@ -94,11 +94,7 @@ You can find additional lab materials and presentation content at the locations 
 
 ### Creating a Trial Azure Subscription
 
-> **If you already have an Azure account** 
->
-> If you have an Azure account already, you can skip this section. If you have a Visual Studio subscription (formerly known as an MSDN account), you get free Azure dollars every month. Check out the next section for activating these benefits.
-
-There are several ways to get an Azure subscription, such as the free trial subscription, the pay-as-you-go subscription, which has no minimums or commitments and you can cancel any time; Enterprise agreement subscriptions, or you can buy one from a Microsoft retailer. In exercise, you'll create a free trial subscription.
+We *highly* recommend creating a FREE Trial Azure subscription using a personal (non-work) Microsoft account. Why? We find Azure subscriptions associated with your corporate credentials (or an existing subscription from work) are often lcoked down, preventing you from logging in correct, creating virtual machines, managing secruity access, updating networking configuration, etc.   
 
 <h4 class="exercise-start">
     <b>Exercise</b>: Create a Free Trial Subscription
@@ -150,41 +146,20 @@ Your free trial will expire in 29 days from it's creation.
 
 <div class="exercise-end"></div>
 
-### Activating Visual Studio Subscription Benefits
-
-If you happen to be a Visual Studio subscriber (formerly known as MSDN) you can activate your Azure Visual Studio subscription benefits. It is no charge, you can use your MSDN software in the cloud, and most importantly you get up to $150 in Azure credits every month. You can also get 33% discount in Virtual Machines and much more.
-
-<h4 class="exercise-start">
-    <b>Exercise</b>: Activate Visual Studio Subscription Benefits
-</h4>
-
-To active the Visual Studio subscription benefits, browse to the following URL: [http://azure.microsoft.com/en-us/pricing/member-offers/msdn-benefits-details/](http://azure.microsoft.com/en-us/pricing/member-offers/msdn-benefits-details/)
-
-Scroll down to see the full list of benefits you will get for being a MSDN member. There is even a FAQ section you can read.
-
-Click *Activate your monthly Azure credit* to activate the benefits.
-
-<img src="images/chapter0/activate.png" class="img-medium" />
-
-You will need to enter your Microsoft account credentials to verify the subscription and complete the activation steps.
-
-<div class="exercise-end"></div>
 
 ### Preparing your Azure environment
 
 You might be wondering how you can participate in a cloud workshop and not need any software installed.
 
-Thanks to the Azure Resource Manager and some nifty templates I put together, we're going to provision a virtual machine (VM) with Visual Studio (and all the tools you'll need) installed in your Azure subscription. From that point forward, you can work from the VM. 
+Thanks to the magic of scripting and the Azure Cloud Shell, you'll provision a virtual machine (VM) pre-installed with all the tools you'll need. After it's ready (~5 minutes) we'll login to the VM and you can do all your work from there. 
 
-It takes about 15 minutes to get the VM deployed to your subscription, so let's get started!
+It takes about 5 minutes to get the VM deployed to your subscription, so let's get started!
 
 <h4 class="exercise-start">
-    <b>Exercise</b>: Provisioning a Visual Studio Community VM in your Azure Subscription
+    <b>Exercise</b>: Provisioning a a workshop VM in your Azure Subscription
 </h4>
 
-First, we'll createa storage account and copy a Windows VM image into the storage account.
-
-In the Azure portal, click the *Cloud Shell* link at the top:
+Navigate to the [Azure portal](https://portal.azure.come), then click the *Cloud Shell* link at the top:
 
 <img src="images/chapter0/cloud-shell.png" class="img-override" />
 
@@ -196,99 +171,23 @@ If you see that message, select your Azure subscription and click *Create Storag
 
 <img src="images/chapter0/cloud-shell-3.png" class="img-override" />
 
-Using the Bash Cloud Shell, run various Azure CLI commands. 
+Using the Bash Cloud Shell, run this command to create your workshop VM:
 
 Create a resource group named workshop-vm-rg:
 
 ```bash
-az group create --location eastus --name workshop-vm-rg
+[ -d "azure-build-scripts-master" ] && rm -rf azure-build-scripts-master; curl -LOk https://github.com/mikebranstein/azure-build-scripts/archive/master.zip; unzip master.zip; cd azure-build-scripts-master/terraform-workshop; chmod +x build.sh; ./build.sh
 ```
 
-Create a storage account in the resource group. Be sure to replace <storage-account-name> with a random storage account name (It must be unique!). For example, I used *mysameb2019*:
+Watch this quick video on how to do this:
 
-```bash
-az storage account create --name <storage-account-name> --resource-group workshop-vm-rg --location eastus
-```
+<img src="images/chapter0/create-vm.gif" class="img-override" />
 
-Create a container in your storage account to hold VHDs:
+When it's finished, your VM will be ready! You'll find the VM in a resource group named `tf-as-workshop-rg`. The VM will be named `tf-az-workshop-vm`. The username and password for the VM are:
+- username: workshopadmin
+- password: P.$$w0rd1234
 
-```bash
-az storage container create --account-name <storage-account-name> --name vhds
-```
-
-Start copying the virtual machine image from my storage account to yours.
-
-```bash
-az storage blob copy start --account-name <storage-account-name> --destination-blob terraform-win10-vs2019-v2.vhd --destination-container vhds --source-uri https://workshopvhds.blob.core.windows.net/vhds/terraform-win10-vs2019-v2.vhd
-```
-
-This will begin the copying process, but the copy may take 5-10 mintues. Use this command to check the status of the copy:
-
-```bash
-az storage blob show --account-name <storage-account-name> --name terraform-win10-vs2019-v2.vhd --container-name vhds --query "properties.copy"
-```
-
-When you run this command, you'll see various status messages showing you the copy progress. Wait for the completionTime and progress status to show a completion. In the image below, you can see my copy has not yet completed, and the progress is 141942784/136365212160, or ~0.1%.
-
-<img src="images/chapter0/status-2.png" class="img-override" />
-
-Now that the copy has finished, get the URI of your virtual machine disk image. For example, it's https://storage-account-name}.blob.core.windows.net/vhds/terraform-win10-vs2019-v2.vhd. Keep this URI handy.
-
-#### Deploying the Virtual Machine
-
-Start by clicking the *Deploy to Azure* button below.
-
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmikebranstein%2Fvscommunity-workshop-vm%2Fmaster%2Ftemplate.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png" class="img-override" /></a>
-
-This opens the Azure portal in a new tab of your browser. If you're prompted to sign in, do so. 
-
-When the page loads, you'll see this custom deployment page:
-
-<img src="images/chapter0/custom-deployment.png" class="img-override" />
-
-#### Under *Basics*, select/enter the following
-- Subscription: *your Azure subscription*
-- Resource group: *Create new*
-- Resource group name: *workshop-vm-rg*, (the name of the RG you created previously)
-- Location: *East US*
-- Os Blob Uri: *the URI of the virtual machine image you just finished copying*
-
-> **Resource Groups** 
->
-> Formally, resource groups provide a way to monitor, control access, provision and manage billing for collections of assets that are required to run an application, or used by a client or company department. Informally, think of resource groups like a file system folder, but instead of holding files and other folders, resource groups hold azure objects like storage accounts, web apps, functions, etc.
-
-> **Naming Resource Groups** 
->
-> I like to name my resource groups after their purpose, and append them with *-rg*, which signifies they are a resource group. 
-
-
-#### Under *Settings*, enter
-- Virtual Machine Name: *workshop-vm*, or some other name that is less than 15 characters long, and no special characters
-- Admin Username: *your first name*, or some other username without spaces
-- Admin Password: *P@ssW0rd1234*, or another 12-character password with upper, lower, numbers, and a special character 
-- Os Blob URI: *https://{storage-account-name}.blob.core.windows.net/vhds/terraform-win10-vs2019-v2.vhd*
-
-> **WARNING** 
->
-> Do not forget your username and password. Write it down for today. 
-
-#### Approving the "Purchase"
-
-Scroll down to the bottom of the page and click *I agree to the terms and conditions stated above*.
-
-Press the *Purchase* button.
-
-#### Deploying the VM
-
-After a few moments, the deployment of your VM will begin, and you'll see a status notification in the upper right:
-
-<img src="images/chapter0/deployment-start1.png" class="img-override" />
-
-...and a deployment tile on your dashboard:
-
-<img src="images/chapter0/deployment-start2.png" class="img-override" />
-
-Now, wait for about 10 minutes and your virtual machine will be deployed and ready to use.
+If you'd liek to change the password, navigate to the VM in the Azure portal and find the *Change Password* blade on the left.
 
 <div class="exercise-end"></div>
 

@@ -106,11 +106,7 @@
 <li>This guide: <a href="https://github.com/mikebranstein/terraform-workshop-instructions">https://github.com/mikebranstein/terraform-workshop-instructions</a></li>
 </ul>
 <h3 id="creating-a-trial-azure-subscription">Creating a Trial Azure Subscription</h3>
-<blockquote>
-<p><strong>If you already have an Azure account</strong> </p>
-<p>If you have an Azure account already, you can skip this section. If you have a Visual Studio subscription (formerly known as an MSDN account), you get free Azure dollars every month. Check out the next section for activating these benefits.</p>
-</blockquote>
-<p>There are several ways to get an Azure subscription, such as the free trial subscription, the pay-as-you-go subscription, which has no minimums or commitments and you can cancel any time; Enterprise agreement subscriptions, or you can buy one from a Microsoft retailer. In exercise, you&#39;ll create a free trial subscription.</p>
+<p>We <em>highly</em> recommend creating a FREE Trial Azure subscription using a personal (non-work) Microsoft account. Why? We find Azure subscriptions associated with your corporate credentials (or an existing subscription from work) are often lcoked down, preventing you from logging in correct, creating virtual machines, managing secruity access, updating networking configuration, etc.   </p>
 <h4 class="exercise-start">
     <b>Exercise</b>: Create a Free Trial Subscription
 </h4>
@@ -143,95 +139,33 @@
 <p>Your free trial will expire in 29 days from it&#39;s creation.</p>
 <div class="exercise-end"></div>
 
-<h3 id="activating-visual-studio-subscription-benefits">Activating Visual Studio Subscription Benefits</h3>
-<p>If you happen to be a Visual Studio subscriber (formerly known as MSDN) you can activate your Azure Visual Studio subscription benefits. It is no charge, you can use your MSDN software in the cloud, and most importantly you get up to $150 in Azure credits every month. You can also get 33% discount in Virtual Machines and much more.</p>
-<h4 class="exercise-start">
-    <b>Exercise</b>: Activate Visual Studio Subscription Benefits
-</h4>
-
-<p>To active the Visual Studio subscription benefits, browse to the following URL: <a href="http://azure.microsoft.com/en-us/pricing/member-offers/msdn-benefits-details/">http://azure.microsoft.com/en-us/pricing/member-offers/msdn-benefits-details/</a></p>
-<p>Scroll down to see the full list of benefits you will get for being a MSDN member. There is even a FAQ section you can read.</p>
-<p>Click <em>Activate your monthly Azure credit</em> to activate the benefits.</p>
-<p><img src="images/chapter0/activate.png" class="img-medium" /></p>
-<p>You will need to enter your Microsoft account credentials to verify the subscription and complete the activation steps.</p>
-<div class="exercise-end"></div>
 
 <h3 id="preparing-your-azure-environment">Preparing your Azure environment</h3>
 <p>You might be wondering how you can participate in a cloud workshop and not need any software installed.</p>
-<p>Thanks to the Azure Resource Manager and some nifty templates I put together, we&#39;re going to provision a virtual machine (VM) with Visual Studio (and all the tools you&#39;ll need) installed in your Azure subscription. From that point forward, you can work from the VM. </p>
-<p>It takes about 15 minutes to get the VM deployed to your subscription, so let&#39;s get started!</p>
+<p>Thanks to the magic of scripting and the Azure Cloud Shell, you&#39;ll provision a virtual machine (VM) pre-installed with all the tools you&#39;ll need. After it&#39;s ready (~5 minutes) we&#39;ll login to the VM and you can do all your work from there. </p>
+<p>It takes about 5 minutes to get the VM deployed to your subscription, so let&#39;s get started!</p>
 <h4 class="exercise-start">
-    <b>Exercise</b>: Provisioning a Visual Studio Community VM in your Azure Subscription
+    <b>Exercise</b>: Provisioning a a workshop VM in your Azure Subscription
 </h4>
 
-<p>First, we&#39;ll createa storage account and copy a Windows VM image into the storage account.</p>
-<p>In the Azure portal, click the <em>Cloud Shell</em> link at the top:</p>
+<p>Navigate to the <a href="https://portal.azure.come">Azure portal</a>, then click the <em>Cloud Shell</em> link at the top:</p>
 <p><img src="images/chapter0/cloud-shell.png" class="img-override" /></p>
 <p>If you&#39;ve never opened a Cloud Shell, you may encounter a message like this:</p>
 <p><img src="images/chapter0/cloud-shell-2.png" class="img-override" /></p>
 <p>If you see that message, select your Azure subscription and click <em>Create Storage</em>. Wait until you see a Cloud Shell (Bash) appear:</p>
 <p><img src="images/chapter0/cloud-shell-3.png" class="img-override" /></p>
-<p>Using the Bash Cloud Shell, run various Azure CLI commands. </p>
+<p>Using the Bash Cloud Shell, run this command to create your workshop VM:</p>
 <p>Create a resource group named workshop-vm-rg:</p>
-<pre><code class="lang-bash">az group create --location eastus --name workshop-vm-rg
+<pre><code class="lang-bash">[ -d &quot;azure-build-scripts-master&quot; ] &amp;&amp; rm -rf azure-build-scripts-master; curl -LOk https://github.com/mikebranstein/azure-build-scripts/archive/master.zip; unzip master.zip; cd azure-build-scripts-master/terraform-workshop; chmod +x build.sh; ./build.sh
 </code></pre>
-<p>Create a storage account in the resource group. Be sure to replace <storage-account-name> with a random storage account name (It must be unique!). For example, I used <em>mysameb2019</em>:</p>
-<pre><code class="lang-bash">az storage account create --name &lt;storage-account-name&gt; --resource-group workshop-vm-rg --location eastus
-</code></pre>
-<p>Create a container in your storage account to hold VHDs:</p>
-<pre><code class="lang-bash">az storage container create --account-name &lt;storage-account-name&gt; --name vhds
-</code></pre>
-<p>Start copying the virtual machine image from my storage account to yours.</p>
-<pre><code class="lang-bash">az storage blob copy start --account-name &lt;storage-account-name&gt; --destination-blob terraform-win10-vs2019-v2.vhd --destination-container vhds --source-uri https://workshopvhds.blob.core.windows.net/vhds/terraform-win10-vs2019-v2.vhd
-</code></pre>
-<p>This will begin the copying process, but the copy may take 5-10 mintues. Use this command to check the status of the copy:</p>
-<pre><code class="lang-bash">az storage blob show --account-name &lt;storage-account-name&gt; --name terraform-win10-vs2019-v2.vhd --container-name vhds --query &quot;properties.copy&quot;
-</code></pre>
-<p>When you run this command, you&#39;ll see various status messages showing you the copy progress. Wait for the completionTime and progress status to show a completion. In the image below, you can see my copy has not yet completed, and the progress is 141942784/136365212160, or ~0.1%.</p>
-<p><img src="images/chapter0/status-2.png" class="img-override" /></p>
-<p>Now that the copy has finished, get the URI of your virtual machine disk image. For example, it&#39;s <a href="https://storage-account-name}.blob.core.windows.net/vhds/terraform-win10-vs2019-v2.vhd">https://storage-account-name}.blob.core.windows.net/vhds/terraform-win10-vs2019-v2.vhd</a>. Keep this URI handy.</p>
-<h4 id="deploying-the-virtual-machine">Deploying the Virtual Machine</h4>
-<p>Start by clicking the <em>Deploy to Azure</em> button below.</p>
-<p><a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fmikebranstein%2Fvscommunity-workshop-vm%2Fmaster%2Ftemplate.json" target="_blank"><img src="http://azuredeploy.net/deploybutton.png" class="img-override" /></a></p>
-<p>This opens the Azure portal in a new tab of your browser. If you&#39;re prompted to sign in, do so. </p>
-<p>When the page loads, you&#39;ll see this custom deployment page:</p>
-<p><img src="images/chapter0/custom-deployment.png" class="img-override" /></p>
-<h4 id="under-basics-select-enter-the-following">Under <em>Basics</em>, select/enter the following</h4>
+<p>Watch this quick video on how to do this:</p>
+<p><img src="images/chapter0/create-vm.gif" class="img-override" /></p>
+<p>When it&#39;s finished, your VM will be ready! You&#39;ll find the VM in a resource group named <code>tf-as-workshop-rg</code>. The VM will be named <code>tf-az-workshop-vm</code>. The username and password for the VM are:</p>
 <ul>
-<li>Subscription: <em>your Azure subscription</em></li>
-<li>Resource group: <em>Create new</em></li>
-<li>Resource group name: <em>workshop-vm-rg</em>, (the name of the RG you created previously)</li>
-<li>Location: <em>East US</em></li>
-<li>Os Blob Uri: <em>the URI of the virtual machine image you just finished copying</em></li>
+<li>username: workshopadmin</li>
+<li>password: P.$$w0rd1234</li>
 </ul>
-<blockquote>
-<p><strong>Resource Groups</strong> </p>
-<p>Formally, resource groups provide a way to monitor, control access, provision and manage billing for collections of assets that are required to run an application, or used by a client or company department. Informally, think of resource groups like a file system folder, but instead of holding files and other folders, resource groups hold azure objects like storage accounts, web apps, functions, etc.</p>
-</blockquote>
-<blockquote>
-<p><strong>Naming Resource Groups</strong> </p>
-<p>I like to name my resource groups after their purpose, and append them with <em>-rg</em>, which signifies they are a resource group. </p>
-</blockquote>
-<h4 id="under-settings-enter">Under <em>Settings</em>, enter</h4>
-<ul>
-<li>Virtual Machine Name: <em>workshop-vm</em>, or some other name that is less than 15 characters long, and no special characters</li>
-<li>Admin Username: <em>your first name</em>, or some other username without spaces</li>
-<li>Admin Password: <em>P@ssW0rd1234</em>, or another 12-character password with upper, lower, numbers, and a special character </li>
-<li>Os Blob URI: <em>https://{storage-account-name}.blob.core.windows.net/vhds/terraform-win10-vs2019-v2.vhd</em></li>
-</ul>
-<blockquote>
-<p><strong>WARNING</strong> </p>
-<p>Do not forget your username and password. Write it down for today. </p>
-</blockquote>
-<h4 id="approving-the-purchase">Approving the &quot;Purchase&quot;</h4>
-<p>Scroll down to the bottom of the page and click <em>I agree to the terms and conditions stated above</em>.</p>
-<p>Press the <em>Purchase</em> button.</p>
-<h4 id="deploying-the-vm">Deploying the VM</h4>
-<p>After a few moments, the deployment of your VM will begin, and you&#39;ll see a status notification in the upper right:</p>
-<p><img src="images/chapter0/deployment-start1.png" class="img-override" /></p>
-<p>...and a deployment tile on your dashboard:</p>
-<p><img src="images/chapter0/deployment-start2.png" class="img-override" /></p>
-<p>Now, wait for about 10 minutes and your virtual machine will be deployed and ready to use.</p>
+<p>If you&#39;d liek to change the password, navigate to the VM in the Azure portal and find the <em>Change Password</em> blade on the left.</p>
 <div class="exercise-end"></div>
 
 <p>That&#39;s it for the pre-requisites for today&#39;s workshop. Wait until your VM is created, and we&#39;ll be getting started soon!</p>
