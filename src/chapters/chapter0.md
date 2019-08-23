@@ -179,9 +179,7 @@ Create a resource group named workshop-vm-rg:
 [ -d "azure-build-scripts-master" ] && rm -rf azure-build-scripts-master; curl -LOk https://github.com/mikebranstein/azure-build-scripts/archive/master.zip; unzip master.zip; cd azure-build-scripts-master/terraform-workshop; chmod +x build.sh; ./build.sh
 ```
 
-Watch this quick video on how to do this:
-
-<img src="images/chapter0/create-vm.gif" class="img-override" />
+<img src="images/chapter0/create-vm.png" class="img-override" />
 
 When it's finished, your VM will be ready! You'll find the VM in a resource group named `tf-as-workshop-rg`. The VM will be named `tf-az-workshop-vm`. The username and password for the VM are:
 - username: workshopadmin
